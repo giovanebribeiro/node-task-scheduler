@@ -1,0 +1,24 @@
+{
+  "name": "node-task-scheduler",
+  "version": "0.0.0",
+  "description": "A Task scheduler for node.js, with cron-syntax and limit dates",
+  "main": "lib/scheduler.js",
+  "scripts": {
+    "test": "grunt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/giovanebribeiro/node-task-scheduler"
+  },
+  "keywords": [
+    "task",
+    "scheduler",
+    "cron"
+  ],
+  "author": "Giovane Boaviagem <giovanebribeiro@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/giovanebribeiro/node-task-scheduler/issues"
+  },
+  "homepage": "https://github.com/giovanebribeiro/node-task-scheduler"
+}
