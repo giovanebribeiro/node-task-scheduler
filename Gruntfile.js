@@ -13,7 +13,7 @@ module.exports = function(grunt){
     },
 
     cafemocha: {
-      all: {src: 'test/*.js', options:{ ui: 'tdd' }, }
+      all: {src: ['tests/*.js'], options:{ ui: 'tdd' }, }
     }
   });
 
