@@ -40,11 +40,11 @@ suite('TaskData.js tests', function(){
     assert(f.exists(helloTask.getTaskActivityFile()), "Task activity file not exists.");
     assert(typeof f.read(helloTask.getTaskActivityFile()) == "string", "The task activity file content is incorrect");
     
-    /*var helloTask2 = TaskData.toTaskData("hello");
+    var helloTask2 = TaskData.toTaskData("hello");
     assert(helloTask2.name == "hello", "The task name is incorrect.");
     assert(helloTask2.endDate.getTime() == tomorrow, "The task end date should be: "+tomorrow.toString());
     assert(helloTask2.cron.next() instanceof Date, "The task cron iterator not working.");
-    //assert(helloTask2.activity() == "Hello World", "The task activity must print 'Hello World'");*/
+    assert(helloTask2.activity() == "Hello World", "The task activity must print 'Hello World'");
 
     done();
   });
