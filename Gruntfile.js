@@ -20,7 +20,8 @@ module.exports = function(grunt){
     cafemocha: {
       all: {
             src: [
-                  'tests/data.js'
+                  'tests/data.js',
+                  'tests/manager.js'
                  ], 
             options:{ 
               ui: 'tdd' 
