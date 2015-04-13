@@ -23,12 +23,12 @@ suite('TaskData.js tests', function(){
     return "Hello World"; 
   }, tomorrow);
 
-
   test(' - if class is correct', function(done){
     assert(helloTask.name == "hello", "The task name is incorrect.");
     assert(helloTask.endDate == tomorrow, "The task end date should be: "+tomorrow.toString());
     assert(helloTask.activity() == "Hello World", "The task activity must print 'Hello World'");
     assert(helloTask.cron.iterator.next() instanceof Date, "The task cron iterator not working.");
+
     done();
   });
 

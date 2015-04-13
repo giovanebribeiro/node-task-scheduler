@@ -9,12 +9,7 @@ module.exports = function(grunt){
   grunt.initConfig({
     jshint:{
       lib: ['lib/**/*.js'],
-      qa: ['Gruntfile.js', 'tests/**/*.js'],
-      ignore_warning:{
-        options:{
-         // '-W054':true /* Ignore the warning: 'The Function constructor is a form of eval.' */
-        }
-      }
+      qa: ['Gruntfile.js', 'tests/**/*.js']
     },
 
     cafemocha: {

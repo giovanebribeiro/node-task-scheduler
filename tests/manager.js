@@ -1,24 +1,30 @@
 /*
- * Managing the tasks
+ * File: tests/manager.js
+ * Author: Giovane Boaviagem
+ *
+ * Test suite for lib/TaskManager.js
  */
 
 var chai = require('chai');
 var assert = chai.assert;
-var fs = require('fs');
+var f = require('../lib/util/file.js');
 var debug = require('debug')('tests/manager');
+var sinon = require('sinon');
 
 var TaskManager = require('../lib/TaskManager.js');
+var TaskData = require('../lib/TaskData.js');
 
 suite('TaskManager tests', function(){
   var manager; 
   var tomorrow;
   
   setup(function(){
+    // cleaning the tasks dir
+    f.rm(TaskData.getTasksDir());
+    
     tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    // scheduler must be started.
     manager = new TaskManager();
-    //manager.start();
   });
 
   test(' - tasks CRUD', function(done){
@@ -46,18 +52,28 @@ suite('TaskManager tests', function(){
 
 
     // Create a new TaskData...
-    manager.createOrUpdate('hello', '* * * * *', function(){ console.log("Hello World!!"); }, tomorrow);
-    assert(manager.tasksSaved.hello.name == "hello", "The Task Data is not saved properly.");
+    manager.createOrUpdate('hello', '*/2 * * * *', function(){ assert.ok("hello2 executed."); }, tomorrow);
+    assert(manager.tasksSaved.hello.name == "hello2", "The Task Data is not saved properly.");
 
     // ... update this object ..
-    manager.createOrUpdate('hello', '*/2 * * * *');
-    assert(manager.tasksSaved.hello.cron.string == '*/2 * * * *');
+    manager.createOrUpdate('hello', '* * * * *');
+    assert(manager.tasksSaved.hello.cron.string == '* * * * *');
 
     // ... then remove it.
     manager.remove('hello');
     assert.isUndefined(manager.tasksSaved.hello, "The task is not removed.");
     done();
 
+  });
+
+  test(" - manage threads", function(done){
+    /*var clock = sinon.useFakeTimers();
+
+    // at this point, the task list have one element: the 'hello' task.
+    manager.start(); // start the pool of threads.
+
+    clock.tick(1000); */
+    done();
   });
 
 });
