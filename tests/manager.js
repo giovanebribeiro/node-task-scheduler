@@ -25,6 +25,9 @@ suite('TaskManager tests', function(){
     tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     manager = new TaskManager();
+
+    // starting the pool of threds
+    manager.start();
   });
 
   test(' - tasks CRUD', function(done){
@@ -42,37 +45,39 @@ suite('TaskManager tests', function(){
 
      // insufficient parameters for new task
      assert.throws(function(){
-      manager.createOrUpdate("hello");
+      manager.createOrUpdate("hello2");
      }, Error, 'Insufficient parameters');
 
      // wrong type parameter
      assert.throws(function(){
-      manager.createOrUpdate("hello", "* * * * *", "wrong type function", tomorrow);
+      manager.createOrUpdate("hello2", "* * * * *", "wrong type function", tomorrow);
      }, Error, "The task activity must be a function");
 
 
     // Create a new TaskData...
-    manager.createOrUpdate('hello', '*/2 * * * *', function(){ assert.ok("hello2 executed."); }, tomorrow, false);
-    assert(manager.tasksSaved.hello.name == "hello", "The Task Data is not saved properly.");
+    manager.createOrUpdate('hello2', '*/2 * * * *', function(){ assert.ok("hello2 executed."); }, tomorrow, false);
+    assert(manager.tasksSaved.hello2.name == "hello2", "The Task Data is not saved properly.");
 
     // ... update this object ..
-    manager.createOrUpdate('hello', '* * * * *');
-    assert(manager.tasksSaved.hello.cron.string == '* * * * *');
+    manager.createOrUpdate('hello2', '* * * * *');
+    assert(manager.tasksSaved.hello2.cron.string == '* * * * *');
 
     // ... then remove it.
-    manager.remove('hello');
-    assert.isUndefined(manager.tasksSaved.hello, "The task is not removed.");
+    manager.remove('hello2');
+    assert.isUndefined(manager.tasksSaved.hello2, "The task is not removed.");
     done();
 
   });
 
   test(" - manage threads", function(done){
-    /*var clock = sinon.useFakeTimers();
+    var clock = sinon.useFakeTimers();
+    manager.createOrUpdate('hello3', '* * * * *', function(){
+      console.log("Hello World!!");
+      assert.ok("All fine.");
+    });
 
-    // at this point, the task list have one element: the 'hello' task.
-    manager.start(); // start the pool of threads.
-
-    clock.tick(1000); */
+    clock.tick(1000);
+    manager.stop();
     done();
   });
 

@@ -12,16 +12,20 @@ var debug = require('debug')('tests/data.js');
 var TaskData = require('../lib/TaskData.js');
 
 suite('TaskData.js tests', function(){
+  var helloTask;
+  var tomorrow;
+
   setup(function(){
     // remove the tasks folder
     f.rm(TaskData.getTasksDir());
+  
+    tomorrow = new Date();
+    tomorrow = tomorrow.setDate(tomorrow.getDate() + 1);
+    helloTask = new TaskData("hello", '* * * * *',function(){ 
+      return "Hello World"; 
+    }, tomorrow);
   });
 
-  var tomorrow = new Date();
-  tomorrow = tomorrow.setDate(tomorrow.getDate() + 1);
-  var helloTask = new TaskData("hello", '* * * * *',function(){ 
-    return "Hello World"; 
-  }, tomorrow);
 
   test(' - if class is correct', function(done){
     assert(helloTask.name == "hello", "The task name is incorrect.");
