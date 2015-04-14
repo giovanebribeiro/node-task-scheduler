@@ -52,8 +52,8 @@ suite('TaskManager tests', function(){
 
 
     // Create a new TaskData...
-    manager.createOrUpdate('hello', '*/2 * * * *', function(){ assert.ok("hello2 executed."); }, tomorrow);
-    assert(manager.tasksSaved.hello.name == "hello2", "The Task Data is not saved properly.");
+    manager.createOrUpdate('hello', '*/2 * * * *', function(){ assert.ok("hello2 executed."); }, tomorrow, false);
+    assert(manager.tasksSaved.hello.name == "hello", "The Task Data is not saved properly.");
 
     // ... update this object ..
     manager.createOrUpdate('hello', '* * * * *');
