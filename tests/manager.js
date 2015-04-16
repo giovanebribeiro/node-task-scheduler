@@ -19,17 +19,43 @@ suite('TaskManager tests', function(){
   var tomorrow;
   
   setup(function(){
-    // cleaning the tasks dir
-    f.rm(TaskData.getTasksDir());
-    
     tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     manager = new TaskManager();
-
-    // starting the pool of threds
-    manager.start();
   });
 
+  test('- createTask() exceptions: no parameters', function(done){
+    assert.throws(function(){
+      manager.createTask();
+    }, Error, 'The task name, and the activity are required');
+    done();
+  });
+  
+
+  test('- createTask() exceptions: task name with wrong type', function(done){
+    assert.throws(function(){
+      manager.createTask(12);
+    }, Error, 'The task name must be a string');
+    done();
+  });
+
+  test('- createTask() exceptions: task activity with wrong type', function(done){
+    assert.throws(function(){
+      manager.createTask("hello2", "print 'Hello World!'");
+    }, Error, 'The task activity must be a function');
+    done();
+  });
+
+ test('- if the task is created', function(done){
+   manager.createTask("hello2", function(){console.log("Hello World!");}, undefined, tomorrow); 
+   
+    assert(manager.tasksSaved.hello2, "The task is not saved.");
+    done();
+  });
+
+  
+
+  /*
   test(' - tasks CRUD', function(done){
     //
     // Testing the exceptions thrown
@@ -55,7 +81,7 @@ suite('TaskManager tests', function(){
 
 
     // Create a new TaskData...
-    manager.createOrUpdate('hello2', '*/2 * * * *', function(){ assert.ok("hello2 executed."); }, tomorrow, false);
+    manager.createOrUpdate('hello2', '* * * * *', function(){ assert.ok("hello2 executed."); }, tomorrow, false);
     assert(manager.tasksSaved.hello2.name == "hello2", "The Task Data is not saved properly.");
 
     // ... update this object ..
@@ -80,5 +106,6 @@ suite('TaskManager tests', function(){
     manager.stop();
     done();
   });
+  */
 
 });
