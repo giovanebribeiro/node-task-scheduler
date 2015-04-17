@@ -47,11 +47,18 @@ suite('TaskManager tests', function(){
   });
 
  test('- if the task is created', function(done){
-   manager.createTask("hello2", function(){console.log("Hello World!");}, undefined, tomorrow); 
+   manager.createTask("hello2", function(){console.log("Hello World!");}, undefined, tomorrow, false); 
    
-    assert(manager.tasksSaved.hello2, "The task is not saved.");
-    done();
-  });
+   assert(manager.tasksSaved.hello2, "The task is not saved.");
+   done();
+ });
+
+ test('- if test is updated', function(done){
+  manager.updateTask('hello2', function(){console.log("Hello World!");}, '*/2 * * * *');
+
+  assert(manager.tasksSaved.hello2.cron.string == "*/2 * * * *", "The task is not updated.");
+  done();
+ });
 
   
 

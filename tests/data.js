@@ -21,9 +21,9 @@ suite('TaskData.js tests', function(){
   
     tomorrow = new Date();
     tomorrow = tomorrow.setDate(tomorrow.getDate() + 1);
-    helloTask = new TaskData("hello", '* * * * *',function(){ 
+    helloTask = new TaskData("hello", function(){ 
       return "Hello World"; 
-    }, tomorrow);
+    }, '* * * * *', tomorrow);
   });
 
   test('- if task name is correct', function(done){
