@@ -10,6 +10,7 @@ var assert = chai.assert;
 var f = require('../lib/util/file.js');
 var debug = require('debug')('tests/manager');
 var sinon = require('sinon');
+var async = require('async');
 
 var TaskManager = require('../lib/TaskManager.js');
 var TaskData = require('../lib/TaskData.js');
@@ -58,6 +59,56 @@ suite('TaskManager tests', function(){
 
   assert(manager.tasksSaved.hello2.cron.string == "*/2 * * * *", "The task is not updated.");
   done();
+ });
+
+ test('- if tasks are loaded', function(done){
+  // 1- create the tasks
+  debug("Creating the tasks");
+  var helloTask1 = new TaskData('helloTask1', function(){
+    console.log("Hello World 1");
+  }, '* * * * *', tomorrow);
+  
+  var helloTask2 = new TaskData('helloTask2', function(){
+    console.log("Hello World 2");
+  }, '*/2 * * * *', tomorrow);
+  
+  var helloTask3 = new TaskData('helloTask3', function(){
+    console.log("Hello World 3");
+  }, '*/3 * * * *', tomorrow);
+
+  //2 - Export them to file
+  debug("Export the tasks");
+  async.series([
+    function(callback){
+      helloTask1.toFile(function(err){
+        callback(err);
+      });
+    },
+
+    function(callback){
+      helloTask2.toFile(function(err){
+        callback(err);
+      });
+    },
+    
+    function(callback){
+      helloTask3.toFile(function(err){
+        callback(err);
+      });
+    },
+
+  ], function(err){
+    if(err) throw err;
+
+    debug("Starting the pool of threads");
+    manager.start(function(err){
+      if(err) throw err;
+
+      debug("checking size of the array", JSON.stringify(manager.tasksSaved));
+      assert(manager.tasksSaved.helloTask3, "The tasks not initialized.");
+      done();
+    });
+  });
  });
 
   

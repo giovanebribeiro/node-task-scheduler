@@ -8,7 +8,7 @@ var chai = require('chai');
 var assert = chai.assert;
 var f = require('../lib/util/file.js');
 var debug = require('debug')('tests/data.js');
-
+require('../lib/util/date.js');
 var TaskData = require('../lib/TaskData.js');
 
 suite('TaskData.js tests', function(){
@@ -80,14 +80,11 @@ suite('TaskData.js tests', function(){
     helloTask.toFile(function(err){
       if(err) throw err;
 
-      TaskData.toTaskData('hello', function(err2, helloTask2){
-        if(err2) throw err2;
-
-        assert(helloTask2.name == "hello", "The task name is incorrect. It should be: 'hello'");
+      var helloTask2 = TaskData.toTaskData('hello');
+      assert(helloTask2.name == "hello", "The task name is incorrect. It should be: 'hello'");
         
-        helloTask.destroyFiles();
-        done();
-      });
+      helloTask.destroyFiles();
+      done();
     });  
   });
 
@@ -96,14 +93,12 @@ suite('TaskData.js tests', function(){
     helloTask.toFile(function(err){
       if(err) throw err;
 
-      TaskData.toTaskData('hello', function(err2, helloTask2){
-        if(err2) throw err2;
-       
-        assert(helloTask.endDate == tomorrow, "The task end date should be: "+tomorrow.toString());
-
-        helloTask.destroyFiles();
-        done();
-      });
+      var helloTask2 = TaskData.toTaskData('hello');
+      debug(new Date(tomorrow));
+      debug(helloTask2.endDate);
+      assert(helloTask2.endDate.compare(new Date(tomorrow)), "The task end date should be: "+tomorrow.toString()+", and not "+helloTask2.endDate.toString());
+      helloTask.destroyFiles();
+      done();
     });  
   });   
   
@@ -111,16 +106,12 @@ suite('TaskData.js tests', function(){
     helloTask.toFile(function(err){
       if(err) throw err;
 
-      TaskData.toTaskData('hello', function(err2, helloTask2){
-        if(err2) throw err2;
-       
-        
-        assert(helloTask.cron.string == "* * * * *", "The cron string is incorrect. Should be: '* * * * *'");
+      var helloTask2 = TaskData.toTaskData('hello');
+      assert(helloTask2.cron.string == "* * * * *", "The cron string is incorrect. Should be: '* * * * *'");
  
 
-        helloTask.destroyFiles();
-        done();
-      });
+      helloTask.destroyFiles();
+      done();
     });  
   }); 
   
@@ -128,14 +119,11 @@ suite('TaskData.js tests', function(){
     helloTask.toFile(function(err){
       if(err) throw err;
 
-      TaskData.toTaskData('hello', function(err2, helloTask2){
-        if(err2) throw err2;
-       
-        assert(helloTask.cron.iterator.next() instanceof Date, "The task cron iterator not working.");
+      var helloTask2 = TaskData.toTaskData('hello');
+        assert(helloTask2.cron.iterator.next() instanceof Date, "The task cron iterator not working.");
 
         helloTask.destroyFiles();
         done();
-      });
     });  
   }); 
   
@@ -143,14 +131,12 @@ suite('TaskData.js tests', function(){
     helloTask.toFile(function(err){
       if(err) throw err;
 
-      TaskData.toTaskData('hello', function(err2, helloTask2){
-        if(err2) throw err2;
+      var helloTask2 = TaskData.toTaskData('hello');
     
-        assert(helloTask.activity() == "Hello World", "The task activity must print 'Hello World'");
+        assert(helloTask2.activity() == "Hello World", "The task activity must print 'Hello World'");
        
         helloTask.destroyFiles();
         done();
-      });
     });  
   }); 
   /*
