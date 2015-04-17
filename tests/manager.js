@@ -65,7 +65,7 @@ suite('TaskManager tests', function(){
   // 1- create the tasks
   debug("Creating the tasks");
   var helloTask1 = new TaskData('helloTask1', function(){
-    console.log("Hello World 1");
+    assert.ok(1);
   }, '* * * * *', tomorrow);
   
   var helloTask2 = new TaskData('helloTask2', function(){
@@ -101,11 +101,16 @@ suite('TaskManager tests', function(){
     if(err) throw err;
 
     debug("Starting the pool of threads");
+    var clock = sinon.useFakeTimers();
     manager.start(function(err){
       if(err) throw err;
 
       debug("checking size of the array", JSON.stringify(manager.tasksSaved));
       assert(manager.tasksSaved.helloTask3, "The tasks not initialized.");
+      clock.tick(1000);
+
+      // falta stop the threads.
+      clock.restore();
       done();
     });
   });
