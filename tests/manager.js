@@ -57,7 +57,7 @@ suite('TaskManager tests', function(){
  test('- if test is updated', function(done){
   manager.updateTask('hello2', function(){console.log("Hello World!");}, '*/2 * * * *');
 
-  assert(manager.tasksSaved.hello2.cron.string == "*/2 * * * *", "The task is not updated.");
+  assert(manager.tasksSaved.hello2.cron == "*/2 * * * *", "The task is not updated.");
   done();
  });
 
@@ -105,7 +105,6 @@ suite('TaskManager tests', function(){
     manager.start(function(err){
       if(err) throw err;
 
-      debug("checking size of the array", JSON.stringify(manager.tasksSaved));
       assert(manager.tasksSaved.helloTask3, "The tasks not initialized.");
       clock.tick(1000);
 

@@ -10,21 +10,9 @@ var TaskManager = require('../lib/TaskManager.js');
 
 suite('TaskData.js tests', function(){
 
-  var taskData;
   setup(function(){});
 
   test(' - if can execute the task, and after 1 sec, exec again.', function(done){
-    var clock = sinon.useFakeTimers();
-    taskData = new TaskData('hello2', '* * * * *', function(){
-      console.log("Hello World!");
-      assert.ok();
-    });
-    taskData.toFile();
-
-    /*TaskManager.runTask(taskData);
-    clock.tick(1000);
-
-    clock.restore();*/
     done();
   });
 });

@@ -37,14 +37,14 @@ suite('TaskData.js tests', function(){
   });
 
   test("- if task cron string is: '* * * * *'", function(done){
-    assert(helloTask.cron.string == "* * * * *", "The cron string is incorrect. Should be: '* * * * *'");
+    assert(helloTask.cron == "* * * * *", "The cron string is incorrect. Should be: '* * * * *'");
     done();
   });
 
-  test(' - if cron-paser next date is a date object', function(done){
+  /*test(' - if cron-paser next date is a date object', function(done){
     assert(helloTask.cron.iterator.next() instanceof Date, "The task cron iterator not working.");
     done();
-  });
+  });*/
 
   test("- if task activity returns 'Hello World'", function(done){
     assert(helloTask.activity() == "Hello World", "The task activity must print 'Hello World'");
@@ -107,7 +107,7 @@ suite('TaskData.js tests', function(){
       if(err) throw err;
 
       var helloTask2 = TaskData.toTaskData('hello');
-      assert(helloTask2.cron.string == "* * * * *", "The cron string is incorrect. Should be: '* * * * *'");
+      assert(helloTask2.cron == "* * * * *", "The cron string is incorrect. Should be: '* * * * *'");
  
 
       helloTask.destroyFiles();
@@ -115,6 +115,7 @@ suite('TaskData.js tests', function(){
     });  
   }); 
   
+  /*
   test("- if imported task have correct property: 'cron.iterator'", function(done){
     helloTask.toFile(function(err){
       if(err) throw err;
@@ -125,7 +126,7 @@ suite('TaskData.js tests', function(){
         helloTask.destroyFiles();
         done();
     });  
-  }); 
+  });*/ 
   
   test("- if imported task have correct property: 'activity'", function(done){
     helloTask.toFile(function(err){
