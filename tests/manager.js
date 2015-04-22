@@ -100,15 +100,70 @@ suite('TaskManager tests', function(){
   ], function(err){
     if(err) throw err;
 
-    debug("Loading tasks");
-    manager.loadTasks(function(err){
+    debug("Starting the pool of threads");
+    var clock = sinon.useFakeTimers();
+    manager.loadTasks(function(err, tasksSaved){
       if(err) throw err;
 
-      assert(manager.tasksSaved.helloTask3, "The tasks not initialized.");
+      assert(tasksSaved.helloTask3, "The tasks not initialized.");
       done();
     });
   });
  });
 
   
+
+  /*
+  test(' - tasks CRUD', function(done){
+    //
+    // Testing the exceptions thrown
+    // The assert.throws function have 3 parameters:
+    // - The function to test, wrapped in another function to receive args
+    // - The Error type
+    // - The Error message, to compare.
+ 
+    // no parameters
+     assert.throws(function(){
+       manager.createOrUpdate();
+     }, Error,  'The task name is required, at least');
+
+     // insufficient parameters for new task
+     assert.throws(function(){
+      manager.createOrUpdate("hello2");
+     }, Error, 'Insufficient parameters');
+
+     // wrong type parameter
+     assert.throws(function(){
+      manager.createOrUpdate("hello2", "* * * * *", "wrong type function", tomorrow);
+     }, Error, "The task activity must be a function");
+
+
+    // Create a new TaskData...
+    manager.createOrUpdate('hello2', '* * * * *', function(){ assert.ok("hello2 executed."); }, tomorrow, false);
+    assert(manager.tasksSaved.hello2.name == "hello2", "The Task Data is not saved properly.");
+
+    // ... update this object ..
+    manager.createOrUpdate('hello2', '* * * * *');
+    assert(manager.tasksSaved.hello2.cron.string == '* * * * *');
+
+    // ... then remove it.
+    manager.remove('hello2');
+    assert.isUndefined(manager.tasksSaved.hello2, "The task is not removed.");
+    done();
+
+  });
+
+  test(" - manage threads", function(done){
+    var clock = sinon.useFakeTimers();
+    manager.createOrUpdate('hello3', '* * * * *', function(){
+      console.log("Hello World!!");
+      assert.ok("All fine.");
+    });
+
+    clock.tick(1000);
+    manager.stop();
+    done();
+  });
+  */
+
 });
