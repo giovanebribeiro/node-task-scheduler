@@ -80,11 +80,11 @@ suite('TaskData.js tests', function(){
     helloTask.toFile(function(err){
       if(err) throw err;
 
-      var helloTask2 = TaskData.toTaskData('hello');
-      assert(helloTask2.name == "hello", "The task name is incorrect. It should be: 'hello'");
-        
-      helloTask.destroyFiles();
-      done();
+      TaskData.toTaskData('hello', function(taskData){  
+        assert(taskData.name == "hello", "The task name is incorrect. It should be: 'hello'");
+        helloTask.destroyFiles();
+        done();
+      });
     });  
   });
 
@@ -93,12 +93,13 @@ suite('TaskData.js tests', function(){
     helloTask.toFile(function(err){
       if(err) throw err;
 
-      var helloTask2 = TaskData.toTaskData('hello');
-      debug(new Date(tomorrow));
-      debug(helloTask2.endDate);
-      assert(helloTask2.endDate.compare(new Date(tomorrow)), "The task end date should be: "+tomorrow.toString()+", and not "+helloTask2.endDate.toString());
-      helloTask.destroyFiles();
-      done();
+      TaskData.toTaskData('hello', function(taskData){
+        debug(new Date(tomorrow));
+        debug(taskData.endDate);
+        assert(taskData.endDate.compare(new Date(tomorrow)), "The task end date should be: "+tomorrow.toString()+", and not "+taskData.endDate.toString());
+        helloTask.destroyFiles();
+        done();
+      });
     });  
   });   
   
@@ -106,13 +107,13 @@ suite('TaskData.js tests', function(){
     helloTask.toFile(function(err){
       if(err) throw err;
 
-      var helloTask2 = TaskData.toTaskData('hello');
-      assert(helloTask2.cron == "* * * * *", "The cron string is incorrect. Should be: '* * * * *'");
- 
+      TaskData.toTaskData('hello', function(taskData){
+        assert(taskData.cron == "* * * * *", "The cron string is incorrect. Should be: '* * * * *'");
+        helloTask.destroyFiles();
+        done();
+      });
+    });
 
-      helloTask.destroyFiles();
-      done();
-    });  
   }); 
   
   /*
@@ -129,16 +130,17 @@ suite('TaskData.js tests', function(){
   });*/ 
   
   test("- if imported task have correct property: 'activity'", function(done){
+    
     helloTask.toFile(function(err){
       if(err) throw err;
 
-      var helloTask2 = TaskData.toTaskData('hello');
-    
-        assert(helloTask2.activity() == "Hello World", "The task activity must print 'Hello World'");
-       
+      TaskData.toTaskData('hello', function(taskData){
+        assert(taskData.activity() == "Hello World", "The task activity must print 'Hello World'");
         helloTask.destroyFiles();
         done();
-    });  
+      });
+    }); 
+
   }); 
   /*
   test(' - if task data export/import works', function(done){

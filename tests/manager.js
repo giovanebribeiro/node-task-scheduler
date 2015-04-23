@@ -4,14 +4,15 @@
  *
  * Test suite for lib/TaskManager.js
  */
-
 var chai = require('chai');
 var assert = chai.assert;
 var f = require('../lib/util/file.js');
 var debug = require('debug')('tests/manager');
-var sinon = require('sinon');
 var async = require('async');
 
+var scheduler = require('../lib/TaskScheduler.js');
+
+//
 var TaskManager = require('../lib/TaskManager.js');
 var TaskData = require('../lib/TaskData.js');
 
@@ -27,7 +28,7 @@ suite('TaskManager tests', function(){
 
   test('- createTask() exceptions: no parameters', function(done){
     assert.throws(function(){
-      manager.createTask();
+      scheduler.manager.createTask();
     }, Error, 'The task name, and the activity are required');
     done();
   });
@@ -35,31 +36,34 @@ suite('TaskManager tests', function(){
 
   test('- createTask() exceptions: task name with wrong type', function(done){
     assert.throws(function(){
-      manager.createTask(12);
+      scheduler.manager.createTask(12);
     }, Error, 'The task name must be a string');
     done();
   });
 
   test('- createTask() exceptions: task activity with wrong type', function(done){
     assert.throws(function(){
-      manager.createTask("hello2", "print 'Hello World!'");
+      scheduler.manager.createTask("hello2", "print 'Hello World!'");
     }, Error, 'The task activity must be a function');
     done();
   });
 
  test('- if the task is created', function(done){
-   manager.createTask("hello2", function(){console.log("Hello World!");}, undefined, tomorrow, false); 
-   
-   assert(manager.tasksSaved.hello2, "The task is not saved.");
-   done();
+   scheduler.manager.createTask("hello2", function(){console.log("Hello World!");}, '* * * * *', tomorrow, function(taskData){
+     assert(scheduler.manager.tasksSaved.hello2, "The task is not saved.");
+     done();
+
+   }); 
  });
 
- test('- if test is updated', function(done){
-  manager.updateTask('hello2', function(){console.log("Hello World!");}, '*/2 * * * *');
+ /*test('- if test is updated', function(done){
+  scheduler.manager.updateTask('hello2', function(){
+    console.log("Hello World2!");
+  });
 
-  assert(manager.tasksSaved.hello2.cron == "*/2 * * * *", "The task is not updated.");
+  assert(scheduler.manager.tasksSaved.hello2.cron == "* * * * *", "The task is not updated.");
   done();
- });
+ });*/
 
  test('- if tasks are loaded', function(done){
   // 1- create the tasks
@@ -101,8 +105,7 @@ suite('TaskManager tests', function(){
     if(err) throw err;
 
     debug("Starting the pool of threads");
-    var clock = sinon.useFakeTimers();
-    manager.loadTasks(function(err, tasksSaved){
+    scheduler.manager.loadTasks(function(err, tasksSaved){
       if(err) throw err;
 
       assert(tasksSaved.helloTask3, "The tasks not initialized.");
