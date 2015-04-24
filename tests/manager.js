@@ -23,7 +23,7 @@ suite('TaskManager tests', function(){
   setup(function(){
     tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    manager = new TaskManager();
+    //manager = new TaskManager();
   });
 
   test('- createTask() exceptions: no parameters', function(done){
@@ -49,35 +49,29 @@ suite('TaskManager tests', function(){
   });
 
  test('- if the task is created', function(done){
-   scheduler.manager.createTask("hello2", function(){console.log("Hello World!");}, '* * * * *', tomorrow, function(taskData){
+   scheduler.manager.createTask("hello2", function(){console.log("Hello World!");}, '* * * * *', tomorrow, function(err, taskData){
+     if(err) throw err;
+
      assert(scheduler.manager.tasksSaved.hello2, "The task is not saved.");
+     
      done();
 
    }); 
  });
 
- /*test('- if test is updated', function(done){
-  scheduler.manager.updateTask('hello2', function(){
-    console.log("Hello World2!");
-  });
-
-  assert(scheduler.manager.tasksSaved.hello2.cron == "* * * * *", "The task is not updated.");
-  done();
- });*/
-
  test('- if tasks are loaded', function(done){
   // 1- create the tasks
   debug("Creating the tasks");
   var helloTask1 = new TaskData('helloTask1', function(){
-    assert.ok(1);
+    console.log("Hello World from helloTask1");
   }, '* * * * *', tomorrow);
   
   var helloTask2 = new TaskData('helloTask2', function(){
-    console.log("Hello World 2");
+    console.log("Hello World from helloTask2");
   }, '*/2 * * * *', tomorrow);
   
   var helloTask3 = new TaskData('helloTask3', function(){
-    console.log("Hello World 3");
+    console.log("Hello World from helloTask3");
   }, '*/3 * * * *', tomorrow);
 
   //2 - Export them to file
@@ -104,7 +98,6 @@ suite('TaskManager tests', function(){
   ], function(err){
     if(err) throw err;
 
-    debug("Starting the pool of threads");
     scheduler.manager.loadTasks(function(err, tasksSaved){
       if(err) throw err;
 

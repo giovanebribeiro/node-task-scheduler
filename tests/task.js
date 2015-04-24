@@ -17,8 +17,8 @@ util.inherits(TestMaster, events.EventEmitter);
 TestMaster.prototype.start = function(delay, taskName){
   var child,
       that = this,
-      onMessage = function(uptime,message){
-        that.emit('event', 'test child message', this.pid, uptime, message);
+      onMessage = function(message){
+        that.emit('event', 'test child message', this.pid, message);
       },
       onError = function(err){
         that.emit('event', 'test child error', this.pid, err);
@@ -57,7 +57,7 @@ suite('Task tests', function(){
     this.timeout(delay*1000*2);
     // create the task
     var helloTask1 = new TaskData('hello', function(){
-    console.log("Hello World!");
+    console.log("Hello World! from hello");
   }, '* * * * *', tomorrow);
 
     // convert to file
@@ -71,7 +71,6 @@ suite('Task tests', function(){
       taskMaster.on('event', function(type, pid, msg){
         if(type === "test child message"){
           assert(msg.uptime == delay, "The task is not executed in correct delay.");
-          //helloTask1.destroyFiles();
           done();
         }
       });
