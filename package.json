@@ -36,6 +36,7 @@
     "async": "^0.9.0",
     "broadway": "^1.1.0",
     "cron-parser": "^0.6.1",
+    "forever-monitor": "^1.5.2",
     "mkdirp": "^0.5.0",
     "ps-tree": "^1.0.0",
     "utile": "^0.3.0"

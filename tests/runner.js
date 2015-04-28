@@ -33,16 +33,10 @@ suite('TaskRunner tests', function(){
     var i=0;
 
     debug("The task must be executed 5 times before end.");
-    ts.runner.on('event', function(type, pid, msg){
-      if(type === "task message" && msg.taskName == "hello"){
-       if(i < 5){
-         i++;
-       }else{
-         done();
-       }
-         
-      }
-    });
+    setTimeout(function(){
+      done();
+    }, 10000);
+
 
   });
 });
