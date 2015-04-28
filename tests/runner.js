@@ -15,8 +15,8 @@ suite('TaskRunner tests', function(){
 
   test('- if pool of threads are created.', function(done){
     // set timeout to delay
-    this.timeout(delay*10000*4);
-
+    var delayTimeout = delay+10000*8;
+    this.timeout(delayTimeout);
     var ts = require('../lib/TaskScheduler.js');
 
     debug("Starting the pool");
@@ -28,15 +28,13 @@ suite('TaskRunner tests', function(){
       console.log("Hello World from Daemon!!");
     }, '*/'+delay+' * * * *', tomorrow, function(err, taskData){
       if(err) throw err;
-    }); 
-    
+    });
+
     var i=0;
 
-    debug("The task must be executed 5 times before end.");
     setTimeout(function(){
       done();
-    }, 10000);
-
+    }, delayTimeout);
 
   });
 });
