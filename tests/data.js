@@ -7,7 +7,6 @@
 var chai = require('chai');
 var assert = chai.assert;
 var f = require('../lib/util/file.js');
-var debug = require('debug')('tests/data.js');
 require('../lib/util/date.js');
 var TaskData = require('../lib/TaskData.js');
 
@@ -94,8 +93,6 @@ suite('TaskData.js tests', function(){
       if(err) throw err;
 
       TaskData.toTaskData('hello', function(taskData){
-        debug(new Date(tomorrow));
-        debug(taskData.endDate);
         assert(taskData.endDate.compare(new Date(tomorrow)), "The task end date should be: "+tomorrow.toString()+", and not "+taskData.endDate.toString());
         helloTask.destroyFiles();
         done();

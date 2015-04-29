@@ -22,19 +22,27 @@ suite('TaskRunner tests', function(){
     debug("Starting the pool");
     ts.manager.clean();
 
-    ts.runner.start();
+    //ts.runner.start();
     debug("Creating the task");
     ts.manager.createTask('hello', function(){
-      console.log("Hello World from Daemon!!");
+      var f = require('fs');
+      var path = require('path');
+      var homedir = (process.platform == "win32")? process.env.HOMEPATH : process.env.HOME;
+      f.writeFile(path.join(homedir,path.sep,Math.random(),'.txt'), 'Hello World from deamon!!', function(err){
+        if(err) throw err;
+      });
     }, '*/'+delay+' * * * *', tomorrow, function(err, taskData){
       if(err) throw err;
+      ts.runner.start();
+      
+      var i=0;
+
+      setTimeout(function(){
+        done();
+      }, delayTimeout - 100);
+
     });
 
-    var i=0;
-
-    setTimeout(function(){
-      done();
-    }, delayTimeout);
-
+    
   });
 });

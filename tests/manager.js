@@ -7,13 +7,10 @@
 var chai = require('chai');
 var assert = chai.assert;
 var f = require('../lib/util/file.js');
-var debug = require('debug')('tests/manager');
 var async = require('async');
+var debug = require('debug')('tests/manager.js');
 
 var scheduler = require('../lib/TaskScheduler.js');
-
-//
-var TaskManager = require('../lib/TaskManager.js');
 var TaskData = require('../lib/TaskData.js');
 
 suite('TaskManager tests', function(){
@@ -26,9 +23,10 @@ suite('TaskManager tests', function(){
     //manager = new TaskManager();
   });
 
+  /*
   test('- createTask() exceptions: no parameters', function(done){
     assert.throws(function(){
-      scheduler.manager.createTask();
+      scheduler.createTask();
     }, Error, 'The task name, and the activity are required');
     done();
   });
@@ -36,29 +34,50 @@ suite('TaskManager tests', function(){
 
   test('- createTask() exceptions: task name with wrong type', function(done){
     assert.throws(function(){
-      scheduler.manager.createTask(12);
+      scheduler.createTask(12);
     }, Error, 'The task name must be a string');
     done();
   });
 
   test('- createTask() exceptions: task activity with wrong type', function(done){
     assert.throws(function(){
-      scheduler.manager.createTask("hello2", "print 'Hello World!'");
+      scheduler.createTask("hello2", "print 'Hello World!'");
     }, Error, 'The task activity must be a function');
     done();
-  });
+  });*/
 
  test('- if the task is created', function(done){
-   scheduler.manager.createTask("hello2", function(){console.log("Hello World!");}, '* * * * *', tomorrow, function(err, taskData){
+   this.timeout(14000);
+
+   var name = "hello2";
+   var activity = function(){
+    console.log("Hello World from hello2!!");
+   };
+   var cronFreq = '* * * * *';
+   var endDate = tomorrow;
+
+   debug("typeof name:",typeof name);
+   debug("typeof activity:",typeof activity);
+   debug("typeof cronFreq:",typeof cronFreq);
+   debug("typeof endDate:",typeof endDate);
+
+   scheduler.createTask(name, activity, cronFreq, endDate, function(err){
      if(err) throw err;
 
-     assert(scheduler.manager.tasksSaved.hello2, "The task is not saved.");
-     
-     done();
+     scheduler.on('stdout', function(m){
+      console.log(m);
+     });
+    
+     // the setTimeout is called to give node some time to execute the tasks.
+     setTimeout(function(){
+       assert(scheduler.haveTask('hello2'), "The task is not saved.");
+       done();
+     }, 10000);
 
    }); 
  });
 
+ /*
  test('- if tasks are loaded', function(done){
   // 1- create the tasks
   debug("Creating the tasks");
@@ -68,11 +87,11 @@ suite('TaskManager tests', function(){
   
   var helloTask2 = new TaskData('helloTask2', function(){
     console.log("Hello World from helloTask2");
-  }, '*/2 * * * *', tomorrow);
+  }, '* * * * *', tomorrow);
   
   var helloTask3 = new TaskData('helloTask3', function(){
     console.log("Hello World from helloTask3");
-  }, '*/3 * * * *', tomorrow);
+  }, '* * * * *', tomorrow);
 
   //2 - Export them to file
   debug("Export the tasks");
@@ -105,7 +124,9 @@ suite('TaskManager tests', function(){
       done();
     });
   });
- });
+
+
+ });*/
 
   
 
