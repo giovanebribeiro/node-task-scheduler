@@ -30,15 +30,21 @@ suite('Task tests', function(){
       if(err) throw err;
 
       var delayTest = delay*1000;
+      var threshold = delayTest + 500;
 
       var child = new (forever.Monitor)(path.join(__dirname,'..',path.sep,'lib',path.sep,'Task.js'),{
         max:1,
         silent: true,
         args: [delayTest, 'hello']
       });
+      
+      var startDate = Date.now();
       child.on('stdout', function(m){
+        var endDate = Date.now();
+        var execTime = endDate - startDate;
         // this event catches all console.log, for example.
         console.log(m.toString('utf-8'));
+        assert((execTime > delayTest && execTime <= threshold ), "The task is not executing in correct time");
         done();
       });
       child.start();

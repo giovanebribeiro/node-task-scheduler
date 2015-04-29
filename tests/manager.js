@@ -47,7 +47,7 @@ suite('TaskManager tests', function(){
   });*/
 
  test('- if the task is created', function(done){
-   this.timeout(14000);
+   this.timeout(4000);
 
    var name = "hello2";
    var activity = function(){
@@ -69,10 +69,8 @@ suite('TaskManager tests', function(){
      });
     
      // the setTimeout is called to give node some time to execute the tasks.
-     setTimeout(function(){
-       assert(scheduler.haveTask('hello2'), "The task is not saved.");
-       done();
-     }, 10000);
+     assert(scheduler.haveTask('hello2'), "The task is not saved.");
+     done();
 
    }); 
  });
