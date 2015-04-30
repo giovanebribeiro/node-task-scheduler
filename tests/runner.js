@@ -5,12 +5,11 @@ var ts = require('../lib/TaskScheduler.js');
 
 suite('TaskRunner tests', function(){
   var tomorrow;
-  var delay;
+  var delay = 3;
 
   setup(function(){
     tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    delay = 3;
   });
 
   test('- if pool of threads are created.', function(done){
@@ -27,18 +26,21 @@ suite('TaskRunner tests', function(){
     var activity = function(){
      console.log("Hello World from hello!!");
     };
-    var cronFreq = '* * * * * *';
+    var cronFreq = '*/'+delay+' * * * * *';
     var endDate = tomorrow;
 
     ts.createTask(name, activity, cronFreq, endDate, function(err){
      if(err) throw err;
 
      var i=0;
-
-     ts.on('task_end', function(m){
-       console.log("i = "+i);
+    
+     var startTime = new Date();
+     ts.on('stdout', function(m){
        if(i < 5){
-        console.log(m);
+        //console.log(m);
+        var endTime = new Date();
+        console.log("End time: "+endTime);
+        console.log("Exec time:", endTime.getTime() - startTime.getTime());
         i++;
        }else{
         done();

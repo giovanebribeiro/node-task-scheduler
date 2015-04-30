@@ -9,16 +9,15 @@ var debug = require('debug')('tests/task.js');
 suite('Task tests', function(){
   var tomorrow;
   var taskMaster;
-  var delay;
+  var delay = 3;
 
   setup(function(){
     tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    delay = 3;
     //taskMaster = new TestMaster();
   });
 
-  test('- if task is executed in correct time.', function(done){
+  test('- if task is executed in correct time (less or equal: '+delay+'s).', function(done){
     // set timeout to delay
     this.timeout(delay*1000*60);
     debug('creating the task');
