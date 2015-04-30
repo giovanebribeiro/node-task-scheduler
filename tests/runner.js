@@ -1,10 +1,10 @@
 var chai = require('chai');
 var assert = chai.assert;
 var debug = require('debug')('tests/runner.js');
+var ts = require('../lib/TaskScheduler.js');
 
 suite('TaskRunner tests', function(){
   var tomorrow;
-  var ts;
   var delay;
 
   setup(function(){
@@ -17,32 +17,35 @@ suite('TaskRunner tests', function(){
     // set timeout to delay
     var delayTimeout = delay+10000*8;
     this.timeout(delayTimeout);
-    var ts = require('../lib/TaskScheduler.js');
 
     debug("Starting the pool");
-    ts.manager.clean();
+    ts.clean();
 
     //ts.runner.start();
-    debug("Creating the task");
-    ts.manager.createTask('hello', function(){
-      var f = require('fs');
-      var path = require('path');
-      var homedir = (process.platform == "win32")? process.env.HOMEPATH : process.env.HOME;
-      f.writeFile(path.join(homedir,path.sep,Math.random(),'.txt'), 'Hello World from deamon!!', function(err){
-        if(err) throw err;
-      });
-    }, '*/'+delay+' * * * *', tomorrow, function(err, taskData){
-      if(err) throw err;
-      ts.runner.start();
-      
-      var i=0;
+   
+    var name = "hello";
+    var activity = function(){
+     console.log("Hello World from hello!!");
+    };
+    var cronFreq = '* * * * * *';
+    var endDate = tomorrow;
 
-      setTimeout(function(){
+    ts.createTask(name, activity, cronFreq, endDate, function(err){
+     if(err) throw err;
+
+     var i=0;
+
+     ts.on('task_end', function(m){
+       console.log("i = "+i);
+       if(i < 5){
+        console.log(m);
+        i++;
+       }else{
         done();
-      }, delayTimeout - 100);
-
-    });
-
+       }
+     });
+    
+    }); 
     
   });
 });

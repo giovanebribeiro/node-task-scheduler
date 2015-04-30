@@ -53,7 +53,7 @@ suite('TaskManager tests', function(){
    var activity = function(){
     console.log("Hello World from hello2!!");
    };
-   var cronFreq = '* * * * *';
+   var cronFreq = '* * * * * *';
    var endDate = tomorrow;
 
    debug("typeof name:",typeof name);

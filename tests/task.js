@@ -4,6 +4,7 @@ var util = require('util');
 var path = require('path');
 var TaskData = require('../lib/TaskData.js');
 var forever = require('forever-monitor');
+var debug = require('debug')('tests/task.js');
 
 suite('Task tests', function(){
   var tomorrow;
@@ -13,38 +14,44 @@ suite('Task tests', function(){
   setup(function(){
     tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    //taskMaster = new TestMaster();
     delay = 3;
+    //taskMaster = new TestMaster();
   });
 
   test('- if task is executed in correct time.', function(done){
     // set timeout to delay
-    this.timeout(delay*1000*2);
-    // create the task
+    this.timeout(delay*1000*60);
+    debug('creating the task');
     var helloTask1 = new TaskData('hello', function(){
-      console.log("Hello World! from hello");
-    }, '* * * * *', tomorrow);
+      console.log("Hello World from hello");
+    }, '*/'+delay+' * * * * *', tomorrow);
 
-    // convert to file
+
+    debug('export to file');
     helloTask1.toFile(function(err){
       if(err) throw err;
-
-      var delayTest = delay*1000;
-      var threshold = delayTest + 500;
-
-      var child = new (forever.Monitor)(path.join(__dirname,'..',path.sep,'lib',path.sep,'Task.js'),{
+      
+      debug('creating the child');
+      var dir = path.join(__dirname,'..','lib','Task.js');
+      debug(dir);
+      var child = new (forever.Monitor)(dir,{
         max:1,
         silent: true,
-        args: [delayTest, 'hello']
+        args: ['hello']
       });
-      
+
+      var delayTest = delay * 1000;
+
       var startDate = Date.now();
-      child.on('stdout', function(m){
+      child.on('stdout', function(msg){
+        console.log(msg.toString('utf-8'));
+      });
+      child.on('exit:code', function(code){
         var endDate = Date.now();
         var execTime = endDate - startDate;
+        debug("execTime", execTime);
         // this event catches all console.log, for example.
-        console.log(m.toString('utf-8'));
-        assert((execTime > delayTest && execTime <= threshold ), "The task is not executing in correct time");
+        assert((execTime <= delayTest ), "The task is not executing in correct time");
         done();
       });
       child.start();
