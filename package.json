@@ -5,7 +5,8 @@
   "main": "lib/scheduler.js",
   "scripts": {
     "test": "grunt",
-    "test-debug": "DEBUG=* grunt"
+    "test-debug": "DEBUG=* grunt",
+    "ts-example": "node ./tests/example.js"
   },
   "repository": {
     "type": "git",

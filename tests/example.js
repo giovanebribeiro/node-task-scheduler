@@ -1,21 +1,27 @@
 var ts = require('../lib/TaskScheduler.js');
 
-console.log("Cleaning the tasks");
-ts.manager.clean();
-
-console.log('Starting the daemon');
-ts.runner.start();
-
-console.log("Creating a task");
-ts.manager.createTask("hello", function(){
-  console.log("Hello World!!");
-}, "* * * * *", undefined, function(err, taskData){
- if(err) throw err; 
+ts.on('stdout', function(m){
+  console.log(m);
 });
+var homeFolder = process.env[(process.platform == 'win32')? 'USERPROFILE' : 'HOME'];
 
-console.log("Monitoring the events");
-ts.runner.on('event', function(type, pid, message){
-  console.log(message);
+ts.init(function(err){
+  if(err) throw err;
+
+  var fs = require('fs');
+
+  console.log("starting the new task..");
+  
+  setTimeout(function(){
+
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    // create/modifies the task with name "hello"
+    ts.createTask('hello2', function(){
+      console.log("Hello World! "+new Date());
+    }, '0 */3 * * * *', tomorrow);  
+
+  }, 10000);
+  
 });
-
-console.log(processes);
