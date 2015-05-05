@@ -1,27 +1,11 @@
-var ts = require('../lib/TaskScheduler.js');
-
-ts.on('stdout', function(m){
-  console.log(m);
+// example 1
+var TaskRunner = require('../lib/TaskRunner.js');
+var tr = new TaskRunner();
+tr.on('scheduler', function(type, pid, data){
+  if(type == "task_exit"){
+    console.log("TYPE", type);
+    console.log("PID", pid);
+    console.log("DATA", data);
+  }
 });
-var homeFolder = process.env[(process.platform == 'win32')? 'USERPROFILE' : 'HOME'];
-
-ts.init(function(err){
-  if(err) throw err;
-
-  var fs = require('fs');
-
-  console.log("starting the new task..");
-  
-  setTimeout(function(){
-
-    var tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    // create/modifies the task with name "hello"
-    ts.createTask('hello2', function(){
-      console.log("Hello World! "+new Date());
-    }, '0 */3 * * * *', tomorrow);  
-
-  }, 10000);
-  
-});
+tr.startTask('hello2');
