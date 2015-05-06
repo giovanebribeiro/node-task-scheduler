@@ -7,5 +7,17 @@ tr.on('scheduler', function(type, pid, data){
     console.log("PID", pid);
     console.log("DATA", data);
   }
+
+  if(type == "task_error"){
+    console.log("TYPE", type);
+    console.log("PID", pid);
+    console.log("DATA", data);
+  }
 });
 tr.startTask('hello2');
+
+/*
+setTimeout(function(){
+  tr.stop();
+}, 65000);
+*/
