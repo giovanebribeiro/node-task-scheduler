@@ -1,4 +1,5 @@
 // example 1
+/*
 var TaskRunner = require('../lib/TaskRunner.js');
 var tr = new TaskRunner();
 tr.on('scheduler', function(type, pid, data){
@@ -16,8 +17,35 @@ tr.on('scheduler', function(type, pid, data){
 });
 tr.startTask('hello2');
 
-/*
 setTimeout(function(){
   tr.stop();
 }, 65000);
 */
+
+// exemplo 2
+var TaskRunner = require('../lib/TaskRunner.js');
+var TaskManager = require('../lib/TaskManager.js');
+
+var tm = new TaskManager();
+var tr = new TaskRunner(tm);
+
+tm.loadTasks(function(err, tasksSaved){
+  if(err) throw err;
+
+  // start task (every minute, with end date to 5 minutes)
+  tr.startTask('hello');
+
+  // create a new task and run it (every 3 minutes, end date to 2h)
+  tm.createTask('hello2', function(callback){
+    console.log("Hello World from hello2!! "+new Date());
+    callback();
+  }, '0 */3 * * * *', new Date("Wed May 0 2015 20:00:00 GMT-0300 (BRT)"), function(err, taskData){
+    if(err) throw err;
+
+    tr.startTask("hello2");
+  });
+
+});
+
+
+
