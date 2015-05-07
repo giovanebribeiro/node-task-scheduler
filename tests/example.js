@@ -36,6 +36,7 @@ tm.loadTasks(function(err, tasksSaved){
 
   // start task (every minute, with end date to 5 minutes)
   tr.startTask('hello');
+  tr.startTask('hello2');
 
   // create a new task and run it (every 3 minutes, end date to 2h)
   tm.createTask('hello2', function(callback){
@@ -47,11 +48,12 @@ tm.loadTasks(function(err, tasksSaved){
     tr.startTask("hello2");
   });
 
-});
-*/
+});*/
+
 
 //example3
 // ajustar os eventos!!!!
+
 var TaskScheduler = require('../lib/TaskScheduler.js');
 var ts = new TaskScheduler();
 ts.on('scheduler', function(type, pid, data){
@@ -60,14 +62,10 @@ ts.on('scheduler', function(type, pid, data){
     console.log("PID", pid);
     console.log("DATA", data);
   }
-
-  if(type == "task_error"){
-    console.log("TYPE", type);
-    console.log("PID", pid);
-    console.log("DATA", data);
-  }
 });
 
-ts.init(function(){
+ts.start(function(){
   console.log("Task runner initialized.");
 });
+
+
