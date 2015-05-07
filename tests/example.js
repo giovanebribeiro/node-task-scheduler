@@ -51,6 +51,7 @@ tm.loadTasks(function(err, tasksSaved){
 */
 
 //example3
+// ajustar os eventos!!!!
 var TaskScheduler = require('../lib/TaskScheduler.js');
 var ts = new TaskScheduler();
 ts.on('scheduler', function(type, pid, data){
