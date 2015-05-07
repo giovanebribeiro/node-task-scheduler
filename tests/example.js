@@ -53,7 +53,7 @@ tm.loadTasks(function(err, tasksSaved){
 
 //example3
 // ajustar os eventos!!!!
-
+console.log("iniciando");
 var TaskScheduler = require('../lib/TaskScheduler.js');
 var ts = new TaskScheduler();
 ts.on('scheduler', function(type, pid, data){
@@ -64,8 +64,15 @@ ts.on('scheduler', function(type, pid, data){
   }
 });
 
+console.log("chamando a função de start");
 ts.start(function(){
   console.log("Task runner initialized.");
+
+  // creating the task hello
+  ts.addTask('hello', function(cb){
+    console.log("Hello world from hello!!" + new Date());
+    cb();
+  }, '0 * * * * *', new Date('Thu 7 May 2015 18:30:00 GMT-0300 (BRT)'));
 });
 
 
