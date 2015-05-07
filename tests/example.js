@@ -23,6 +23,7 @@ setTimeout(function(){
 */
 
 // example 2
+/*
 var TaskRunner = require('../lib/TaskRunner.js');
 var TaskManager = require('../lib/TaskManager.js');
 
@@ -40,13 +41,32 @@ tm.loadTasks(function(err, tasksSaved){
   tm.createTask('hello2', function(callback){
     console.log("Hello World from hello2!! "+new Date());
     callback();
-  }, '0 */3 * * * *', new Date("Wed May 6 2015 23:00:00 GMT-0300 (BRT)"), function(err, taskData){
+  }, '0 *3 * * * *', new Date("Wed May 6 2015 23:00:00 GMT-0300 (BRT)"), function(err, taskData){
     if(err) throw err;
 
     tr.startTask("hello2");
   });
 
 });
+*/
 
+//example3
+var TaskScheduler = require('../lib/TaskScheduler.js');
+var ts = new TaskScheduler();
+ts.on('scheduler', function(type, pid, data){
+  if(type == "task_exit"){
+    console.log("TYPE", type);
+    console.log("PID", pid);
+    console.log("DATA", data);
+  }
 
+  if(type == "task_error"){
+    console.log("TYPE", type);
+    console.log("PID", pid);
+    console.log("DATA", data);
+  }
+});
 
+ts.init(function(){
+  console.log("Task runner initialized.");
+});
