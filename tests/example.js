@@ -57,11 +57,7 @@ console.log("iniciando");
 var TaskScheduler = require('../lib/TaskScheduler.js');
 var ts = new TaskScheduler();
 ts.on('scheduler', function(type, pid, data){
-  if(type == "task_exit"){
-    console.log("TYPE", type);
-    console.log("PID", pid);
-    console.log("DATA", data);
-  }
+    //console.log("DATA", data);
 });
 
 console.log("chamando a função de start");
@@ -72,12 +68,16 @@ ts.start(function(){
   ts.addTask('hello', function(cb){
     console.log("Hello world from hello!! " + new Date());
     cb();
-  }, '0 * * * * *', new Date('Fri 8 May 2015 01:06:00 GMT-0300 (BRT)'));
+  }, '0 * * * * *', new Date('Fri 8 May 2015 11:30:00 GMT-0300 (BRT)'));
 
   ts.addTask('hello2', function(cb){
     console.log("Hello world from hello2!! " + new Date());
     cb();
-  }, '0 */3 * * * *', new Date('Fri 8 May 2015 01:10:00 GMT-0300 (BRT)'));
+  }, '0 */3 * * * *', new Date('Fri 8 May 2015 11:35:00 GMT-0300 (BRT)'));
+
+  setTimeout(function(){
+    ts.removeTask('hello2');
+  }, 240000);
 
 });
 
