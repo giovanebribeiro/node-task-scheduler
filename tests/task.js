@@ -1,30 +1,29 @@
 var chai = require('chai');
 var assert = chai.assert;
-var util = require('util');
 var path = require('path');
 var TaskData = require('../lib/TaskData.js');
-var forever = require('forever-monitor');
 var debug = require('debug')('tests/task.js');
+var cp = require('child_process');
 
 suite('Task tests', function(){
   var tomorrow;
-  var taskMaster;
-  var delay = 3;
+  var delay = 1;
 
   setup(function(){
     tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    //taskMaster = new TestMaster();
   });
 
-  test('- if task is executed in correct time (less or equal: '+delay+'s).', function(done){
+  test('- if task is executed in correct time (less or equal: '+delay+'min).', function(done){
     // set timeout to delay
-    this.timeout(delay*1000*60);
+    this.timeout(delay*1000*60*2);
     debug('creating the task');
-    var helloTask1 = new TaskData('hello', function(){
+    var helloTask1 = new TaskData('hello', function(callback){
       console.log("Hello World from hello");
-    }, '*/'+delay+' * * * * *', tomorrow);
+      callback();
+    }, '0 */'+delay+' * * * *', tomorrow);
 
+    var delayTest = delay*1000*60;
 
     debug('export to file');
     helloTask1.toFile(function(err){
@@ -32,29 +31,18 @@ suite('Task tests', function(){
       
       debug('creating the child');
       var dir = path.join(__dirname,'..','lib','Task.js');
-      debug(dir);
-      var child = new (forever.Monitor)(dir,{
-        max:1,
-        silent: true,
-        args: ['hello']
-      });
-
-      var delayTest = delay * 1000;
 
       var startDate = Date.now();
-      child.on('stdout', function(msg){
-        console.log(msg.toString('utf-8'));
-      });
-      child.on('exit:code', function(code){
+      var child = cp.fork(dir,['hello']);
+      child.on('exit', function(code){
         var endDate = Date.now();
         var execTime = endDate - startDate;
-        debug("execTime", execTime);
-        // this event catches all console.log, for example.
-        assert((execTime <= delayTest ), "The task is not executing in correct time");
+        assert((execTime <= delayTest ), "The task is not executing in correct time");  
         done();
       });
-      child.start();
 
     });
+
   });
+
 });
