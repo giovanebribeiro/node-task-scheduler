@@ -70,9 +70,15 @@ ts.start(function(){
 
   // creating the task hello
   ts.addTask('hello', function(cb){
-    console.log("Hello world from hello!!" + new Date());
+    console.log("Hello world from hello!! " + new Date());
     cb();
-  }, '0 * * * * *', new Date('Thu 7 May 2015 18:30:00 GMT-0300 (BRT)'));
+  }, '0 * * * * *', new Date('Fri 8 May 2015 01:06:00 GMT-0300 (BRT)'));
+
+  ts.addTask('hello2', function(cb){
+    console.log("Hello world from hello2!! " + new Date());
+    cb();
+  }, '0 */3 * * * *', new Date('Fri 8 May 2015 01:10:00 GMT-0300 (BRT)'));
+
 });
 
 
