@@ -16,8 +16,8 @@ module.exports = function(grunt){
       all: {
             src: [
                   'tests/data.js',
-                  'tests/task.js'/*,
                   'tests/manager.js',
+                  'tests/task.js'/*,
                   'tests/runner.js'*/
                  ], 
             options:{ 

@@ -8,10 +8,9 @@ var chai = require('chai');
 var assert = chai.assert;
 var f = require('../lib/util/file.js');
 var async = require('async');
-var debug = require('debug')('tests/manager.js');
 
-var scheduler = require('../lib/TaskScheduler.js');
 var TaskData = require('../lib/TaskData.js');
+var TaskManager = require('../lib/TaskManager.js');
 
 suite('TaskManager tests', function(){
   var manager; 
