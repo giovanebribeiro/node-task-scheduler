@@ -1,52 +1,59 @@
 var chai = require('chai');
 var assert = chai.assert;
-var debug = require('debug')('tests/runner.js');
-var ts = require('../lib/TaskScheduler.js');
+
+var TaskManager = require('../lib/TaskManager.js');
+var TaskRunner = require('../lib/TaskRunner.js');
 
 suite('TaskRunner tests', function(){
+  var runner;
+  var manager;
   var tomorrow;
-  var delay = 3;
 
   setup(function(){
     tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
+
+    runner = new TaskRunner();
+    manager = new TaskManager();
   });
 
-  test('- if pool of threads are created.', function(done){
+  test('- if the task is executed 3 times.', function(done){
     // set timeout to delay
-    var delayTimeout = delay+10000*8;
-    this.timeout(delayTimeout);
+    var delayEndDate = 5 * 60 * 1000; // 5 minute in milisseconds
+    this.timeout(delayEndDate);
 
-    debug("Starting the pool");
-    ts.clean();
+    var count = 0;
 
-    //ts.runner.start();
-   
+    // implementing the listener for the TaskRunner
+    runner.on('runner', function(type, pid, data){
+      if(type == "task_loop" && data.code === 0){
+
+        if(count < 2){
+          count++;
+        }else{
+          runner.stop();
+          assert.ok(1);
+          done();
+        }
+
+      }
+    });
+
+    // creating a task
     var name = "hello";
-    var activity = function(){
+    var activity = function(callback){
      console.log("Hello World from hello!!");
+     callback();
     };
-    var cronFreq = '*/'+delay+' * * * * *';
+    var cronFreq = '0 * * * * *';
+
+    var startDate = Date.now(); 
     var endDate = tomorrow;
 
-    ts.createTask(name, activity, cronFreq, endDate, function(err){
+    manager.createTask(name, activity, cronFreq, endDate, function(err, taskData){
      if(err) throw err;
 
-     var i=0;
-    
-     var startTime = new Date();
-     ts.on('stdout', function(m){
-       if(i < 5){
-        //console.log(m);
-        var endTime = new Date();
-        console.log("End time: "+endTime);
-        console.log("Exec time:", endTime.getTime() - startTime.getTime());
-        i++;
-       }else{
-        done();
-       }
-     });
-    
+     runner.startTask('hello');    
     }); 
     
   });

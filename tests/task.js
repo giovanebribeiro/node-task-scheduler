@@ -37,7 +37,8 @@ suite('Task tests', function(){
       child.on('exit', function(code){
         var endDate = Date.now();
         var execTime = endDate - startDate;
-        assert((execTime <= delayTest ), "The task is not executing in correct time");  
+        assert((execTime <= delayTest ), "The task is not executing in correct time"); 
+        helloTask1.destroyFiles(); 
         done();
       });
 

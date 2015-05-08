@@ -19,94 +19,64 @@ suite('TaskManager tests', function(){
   setup(function(){
     tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    //manager = new TaskManager();
+    manager = new TaskManager();
   });
 
-  /*
-  test('- createTask() exceptions: no parameters', function(done){
-    assert.throws(function(){
-      scheduler.createTask();
-    }, Error, 'The task name, and the activity are required');
-    done();
-  });
-  
 
-  test('- createTask() exceptions: task name with wrong type', function(done){
-    assert.throws(function(){
-      scheduler.createTask(12);
-    }, Error, 'The task name must be a string');
-    done();
-  });
+  test('- if the task is created', function(done){
+    this.timeout(4000);
 
-  test('- createTask() exceptions: task activity with wrong type', function(done){
-    assert.throws(function(){
-      scheduler.createTask("hello2", "print 'Hello World!'");
-    }, Error, 'The task activity must be a function');
-    done();
-  });*/
+    var name = "hello";
+    var activity = function(callback){
+      console.log("Hello World from hello!!");
+    };
+    var cronFreq = '0 * * * * *';
+    var endDate = tomorrow;
 
- test('- if the task is created', function(done){
-   this.timeout(4000);
-
-   var name = "hello2";
-   var activity = function(){
-    console.log("Hello World from hello2!!");
-   };
-   var cronFreq = '* * * * * *';
-   var endDate = tomorrow;
-
-   debug("typeof name:",typeof name);
-   debug("typeof activity:",typeof activity);
-   debug("typeof cronFreq:",typeof cronFreq);
-   debug("typeof endDate:",typeof endDate);
-
-   scheduler.createTask(name, activity, cronFreq, endDate, function(err){
+    manager.createTask(name, activity, cronFreq, endDate, function(err, taskData){
      if(err) throw err;
 
-     scheduler.on('stdout', function(m){
-      console.log(m);
-     });
-    
-     // the setTimeout is called to give node some time to execute the tasks.
-     assert(scheduler.haveTask('hello2'), "The task is not saved.");
+     assert(manager.haveTask('hello'), "The task is not saved.");
+     manager.clean(); // clean files.
      done();
 
    }); 
  });
 
- /*
- test('- if tasks are loaded', function(done){
+ 
+ test('- if tasks are loaded.', function(done){
   // 1- create the tasks
-  debug("Creating the tasks");
-  var helloTask1 = new TaskData('helloTask1', function(){
+  var hello = new TaskData('hello', function(callback){
     console.log("Hello World from helloTask1");
-  }, '* * * * *', tomorrow);
+    callback();
+  }, '0 * * * * *', tomorrow);
   
-  var helloTask2 = new TaskData('helloTask2', function(){
-    console.log("Hello World from helloTask2");
-  }, '* * * * *', tomorrow);
+  var hello2 = new TaskData('hello2', function(callback){
+    console.log("Hello World from hello2");
+    callback();
+  }, '0 */2 * * * *', tomorrow);
   
-  var helloTask3 = new TaskData('helloTask3', function(){
-    console.log("Hello World from helloTask3");
-  }, '* * * * *', tomorrow);
+  var hello3 = new TaskData('hello3', function(callback){
+    console.log("Hello World from hello3");
+    callback();
+  }, '0 */3 * * * *', tomorrow);
 
   //2 - Export them to file
-  debug("Export the tasks");
   async.series([
     function(callback){
-      helloTask1.toFile(function(err){
+      hello.toFile(function(err){
         callback(err);
       });
     },
 
     function(callback){
-      helloTask2.toFile(function(err){
+      hello2.toFile(function(err){
         callback(err);
       });
     },
     
     function(callback){
-      helloTask3.toFile(function(err){
+      hello3.toFile(function(err){
         callback(err);
       });
     },
@@ -114,16 +84,17 @@ suite('TaskManager tests', function(){
   ], function(err){
     if(err) throw err;
 
-    scheduler.manager.loadTasks(function(err, tasksSaved){
+    manager.loadTasks(function(err, tasksSaved){
       if(err) throw err;
 
-      assert(tasksSaved.helloTask3, "The tasks not initialized.");
+      assert(tasksSaved.hello && tasksSaved.hello2 && tasksSaved.hello3, "The tasks not initialized.");
+      manager.clean();
       done();
     });
   });
 
 
- });*/
+ });
 
   
 
