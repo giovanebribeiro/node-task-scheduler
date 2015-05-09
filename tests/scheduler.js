@@ -15,28 +15,45 @@ suite('TaskScheduler tests', function(){
   });
 
   test("- Starting tasks previously saved (and executing the 'hello' task 3 times)", function(done){
-    // in previously test case, the 'hello' task was created.
-    scheduler.start(function(){
-      console.log("Task Runner started.");
+    this.timeout(1 * 60 * 1000 * 5); // 5 minutes
+      
+    var count = 0;
 
-      var count = 0;
+    var hello = new TaskData("hello", function(callback){ 
+      console.log("Hello World!" + new Date());
+      callback(); 
+    }, '0 * * * * *', tomorrow);
 
-      scheduler.on('scheduler', function(type, pid, data){
-        if(type == 'task_loop' && data.task == "hello" && data.code === 0){
+    //save the task to file
+    hello.toFile(function(err){
+      if(err) throw err;
+
+      //load the saved task
+      scheduler.start(function(){
+        console.log("Task Runner started.");
+
+        // add the listener. 
+        scheduler.on('scheduler', function(type, pid, data){
+          if(type == 'task_loop' && data.code === 0){
+
+            console.log("count", count);
           
-          if(count < 2){
-            count ++;
-          }else{
-            scheduler.remove('hello');
-            assert.ok(1);
-            done(); 
+            if(count < 2){
+              count++;
+            }else{
+              scheduler.removeTask('hello', function(){
+                assert.ok(1);
+                done(); 
+              });
+            }
+  
           }
+        });
 
-        }
       });
 
     });
-  
+
   });
 
   // test()...

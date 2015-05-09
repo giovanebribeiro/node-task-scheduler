@@ -24,25 +24,30 @@ suite('TaskRunner tests', function(){
 
     var count = 0;
 
-    // implementing the listener for the TaskRunner
-    runner.on('runner', function(type, pid, data){
+    var runnerListener =  function(type, pid, data){
       if(type == "task_loop" && data.code === 0){
 
         if(count < 2){
           count++;
         }else{
-          runner.stop();
-          assert.ok(1);
-          done();
+          runner.stop('hello', function(){
+            assert.ok(1);
+            manager.remove('hello');
+            runner.removeListener('runner', runnerListener);
+            done();
+          });
         }
 
       }
-    });
+    };
+
+    // implementing the listener for the TaskRunner
+    runner.on('runner',runnerListener);
 
     // creating a task
     var name = "hello";
     var activity = function(callback){
-     console.log("Hello World from hello!!");
+     console.log("Hello World from hello (task runner)!!");
      callback();
     };
     var cronFreq = '0 * * * * *';
