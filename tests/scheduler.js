@@ -32,29 +32,73 @@ suite('TaskScheduler tests', function(){
       scheduler.start(function(){
         console.log("Task Runner started.");
 
-        // add the listener. 
-        scheduler.on('scheduler', function(type, pid, data){
+        var listener = function(type, pid, data){
+ //         console.log(data.message);
           if(type == 'task_loop' && data.code === 0){
 
-            console.log("count", count);
-          
             if(count < 2){
               count++;
             }else{
               scheduler.removeTask('hello', function(){
+                scheduler.removeListener('scheduler', listener);
                 assert.ok(1);
                 done(); 
               });
             }
   
           }
-        });
+        };
 
+        // add the listener. 
+        scheduler.on('scheduler', listener);
       });
 
     });
 
   });
+/*
+  test('- add a new task', function(done){
+    this.timeout(1 * 60 * 1000 * 15); // 15 minutes
 
-  // test()...
+    var task1Done = false;
+    var task2Done = false;
+
+    var listener = function(type, pid, data){
+      if(type == 'task_exit' && data.task == 'hello'){
+        task1Done = true;
+      }
+
+      if(type == 'task_exit' && data.task == 'hello2'){
+        task2Done = true;
+      }
+
+      if(task1Done && task2Done){
+        scheduler.removeListener('scheduler', listener);
+        assert.ok(1);
+        done();
+      }
+    };
+
+    scheduler.on('scheduler', listener);
+    
+    var tenMinutesLater = Date.now() + (1*60*1000*10);
+    var endDate = new Date(tenMinutesLater);
+
+    //add the first task with 1 minute of delay
+    scheduler.addTask('hello', function(callback){
+      console.log("Hello from hello! " + new Date());
+      callback();
+    }, "* * * * *", endDate);
+
+    // add the second task after 4 minutes, with 2 minutes of delay and same endDate
+    setTimeout(function(){
+      scheduler.addTask('hello2', function(callback){
+        console.log("Hello from hello2! "+new Date());
+        callback();
+      }, "*2 * * * *", endDate);
+    }, (1*60*1000*4));
+
+
+  });
+*/
 });
