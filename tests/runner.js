@@ -17,7 +17,7 @@ suite('TaskRunner tests', function(){
     manager = new TaskManager();
   });
 
-  test('- if the task is executed 3 times.', function(done){
+  test('- if the task is executed 3 times and stops.', function(done){
     // set timeout to delay
     var delayEndDate = 5 * 60 * 1000; // 5 minute in milisseconds
     this.timeout(delayEndDate);
@@ -31,7 +31,7 @@ suite('TaskRunner tests', function(){
           count++;
         }else{
           runner.stop('hello', function(){
-            assert.ok(1);
+            assert(!runner.isRunning('hello'), "The task is still running after stops.");
             manager.remove('hello');
             runner.removeListener('runner', runnerListener);
             done();

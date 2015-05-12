@@ -96,7 +96,23 @@ suite('TaskManager tests', function(){
 
  });
 
-  
+ test('- if task is removed.', function(done){
+    var name = "hello";
+    var activity = function(callback){
+      console.log("Hello World from hello!!");
+      callback();
+    };
+    var cronFreq = '0 * * * * *';
+    var endDate = tomorrow;
+
+    manager.createTask(name, activity, cronFreq, endDate, function(err, taskData){
+     if(err) throw err;
+
+     manager.remove('hello');
+     assert(!manager.haveTask('hello'), "The task is not removed.");
+     done();
+   }); 
+ });
 
   /*
   test(' - tasks CRUD', function(done){

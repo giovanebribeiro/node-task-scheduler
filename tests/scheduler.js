@@ -14,7 +14,7 @@ suite('TaskScheduler tests', function(){
     scheduler = new TaskScheduler();
   });
 
-  test("- Starting tasks previously saved (and executing the 'hello' task 3 times)", function(done){
+  test("- Starting tasks previously saved and remove it", function(done){
     this.timeout(1 * 60 * 1000 * 5); // 5 minutes
       
     var count = 0;
@@ -32,30 +32,20 @@ suite('TaskScheduler tests', function(){
       scheduler.start(function(){
         console.log("Task Runner started.");
 
-        var listener = function(type, pid, data){
- //         console.log(data.message);
-          if(type == 'task_loop' && data.code === 0){
+        assert(scheduler.isRunning('hello'), "The task previously saved is not running.");
+        
+        scheduler.removeTask('hello', function(){
+          assert(!scheduler.isRunning('hello'), "The task is still running even after removes");
+          assert(!scheduler.haveTask('hello'), "The task still exists in queue even after removes");
+          done();
+        });
 
-            if(count < 2){
-              count++;
-            }else{
-              scheduler.removeTask('hello', function(){
-                scheduler.removeListener('scheduler', listener);
-                assert.ok(1);
-                done(); 
-              });
-            }
-  
-          }
-        };
-
-        // add the listener. 
-        scheduler.on('scheduler', listener);
       });
-
     });
 
   });
+
+
 /*
   test('- add a new task', function(done){
     this.timeout(1 * 60 * 1000 * 15); // 15 minutes
@@ -101,4 +91,5 @@ suite('TaskScheduler tests', function(){
 
   });
 */
+
 });
