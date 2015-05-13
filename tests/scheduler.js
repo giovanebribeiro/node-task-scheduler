@@ -16,9 +16,8 @@ suite('TaskScheduler tests', function(){
 
   test("- Starting tasks previously saved and remove it", function(done){
     this.timeout(1 * 60 * 1000 * 5); // 5 minutes
-      
-    var count = 0;
-
+    
+    // create the task  
     var hello = new TaskData("hello", function(callback){ 
       console.log("Hello World!" + new Date());
       callback(); 
@@ -34,11 +33,13 @@ suite('TaskScheduler tests', function(){
 
         assert(scheduler.isRunning('hello'), "The task previously saved is not running.");
         
-        scheduler.removeTask('hello', function(){
+        scheduler.removeTask('hello');
+        
+        setTimeout(function(){
           assert(!scheduler.isRunning('hello'), "The task is still running even after removes");
           assert(!scheduler.haveTask('hello'), "The task still exists in queue even after removes");
           done();
-        });
+        }, 1*60*1000); // task delay
 
       });
     });

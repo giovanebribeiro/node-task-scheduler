@@ -13,8 +13,8 @@ suite('TaskRunner tests', function(){
     tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    runner = new TaskRunner();
     manager = new TaskManager();
+    runner = new TaskRunner(manager);
   });
 
   test('- if the task is executed 3 times and stops.', function(done){
@@ -30,12 +30,14 @@ suite('TaskRunner tests', function(){
         if(count < 2){
           count++;
         }else{
-          runner.stop('hello', function(){
+          runner.stop('hello');
+         
+          // only in the next delay, we can check if task will stop to execute. 
+          setTimeout(function(){
             assert(!runner.isRunning('hello'), "The task is still running after stops.");
-            manager.remove('hello');
             runner.removeListener('runner', runnerListener);
             done();
-          });
+          }, 1*60*1000);
         }
 
       }
