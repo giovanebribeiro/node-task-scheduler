@@ -47,14 +47,18 @@ suite('TaskScheduler tests', function(){
   });
 
 
-/*
-  test('- add a new task', function(done){
-    this.timeout(1 * 60 * 1000 * 15); // 15 minutes
+
+  test('- add 2 new tasks (with different delays and same end dates) and waits to finish', function(done){
+    this.timeout(1 * 60 * 1000 * 15 * 2); // 30 minutes
 
     var task1Done = false;
     var task2Done = false;
 
     var listener = function(type, pid, data){
+      if(data.code === 0 || data.code === 2){
+        console.log("["+type+" - "+data.task+"]", data.message);
+      }
+
       if(type == 'task_exit' && data.task == 'hello'){
         task1Done = true;
       }
@@ -79,18 +83,18 @@ suite('TaskScheduler tests', function(){
     scheduler.addTask('hello', function(callback){
       console.log("Hello from hello! " + new Date());
       callback();
-    }, "* * * * *", endDate);
+    }, "0 * * * * *", endDate);
 
     // add the second task after 4 minutes, with 2 minutes of delay and same endDate
     setTimeout(function(){
       scheduler.addTask('hello2', function(callback){
         console.log("Hello from hello2! "+new Date());
         callback();
-      }, "*2 * * * *", endDate);
+      }, "0 */2 * * * *", endDate);
     }, (1*60*1000*4));
 
 
   });
-*/
+
 
 });
