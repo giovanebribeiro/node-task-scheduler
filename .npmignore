@@ -1,0 +1,11 @@
+*.log
+node_modules/
+*.swo
+*.swp
+*~
+lib/tasks
+Gruntfile.js
+tests/
+README.md
+.gitignore
+.travis.yml
