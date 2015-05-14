@@ -14,14 +14,14 @@ suite('TaskScheduler tests', function(){
     scheduler = new TaskScheduler();
   });
 
-  test("- Starting tasks previously saved and remove it", function(done){
-    this.timeout(1 * 60 * 1000 * 5); // 5 minutes
+  test("- Starting tasks previously saved, execute during 4 minutes, and remove", function(done){
+    this.timeout(1 * 60 * 1000 * 5 * 2); // 10 minutes
     
     // create the task  
     var hello = new TaskData("hello", function(callback){ 
       console.log("Hello World!" + new Date());
       callback(); 
-    }, '0 * * * * *', tomorrow);
+    }, '0 * * * * *');
 
     //save the task to file
     hello.toFile(function(err){
@@ -32,14 +32,18 @@ suite('TaskScheduler tests', function(){
         console.log("Task Runner started.");
 
         assert(scheduler.isRunning('hello'), "The task previously saved is not running.");
-        
-        scheduler.removeTask('hello');
-        
+
         setTimeout(function(){
-          assert(!scheduler.isRunning('hello'), "The task is still running even after removes");
-          assert(!scheduler.haveTask('hello'), "The task still exists in queue even after removes");
-          done();
-        }, 1*60*1000); // task delay
+        
+          scheduler.removeTask('hello');
+        
+          setTimeout(function(){
+            assert(!scheduler.isRunning('hello'), "The task is still running even after removes");
+            assert(!scheduler.haveTask('hello'), "The task still exists in queue even after removes");
+            done();
+          }, 1*60*1000); // task delay
+
+        }, 1*60*1000*4);
 
       });
     });
@@ -55,9 +59,11 @@ suite('TaskScheduler tests', function(){
     var task2Done = false;
 
     var listener = function(type, pid, data){
+      /*
       if(data.code === 0 || data.code === 2){
         console.log("["+type+" - "+data.task+"]", data.message);
       }
+      */
 
       if(type == 'task_exit' && data.task == 'hello'){
         task1Done = true;
