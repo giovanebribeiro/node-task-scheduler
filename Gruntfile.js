@@ -25,8 +25,9 @@ module.exports = function(grunt){
               ui: 'tdd' 
             }, 
       }
-    }
-  });
+    },
+
+  }); 
 
   grunt.registerTask('default', ['jshint', 'cafemocha']);
 };

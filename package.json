@@ -29,16 +29,11 @@
     "grunt": "^0.4.5",
     "grunt-cafe-mocha": "^0.1.13",
     "grunt-contrib-jshint": "^0.11.1",
-    "grunt-jsdoc": "^0.5.8",
-    "jsdoc": "^3.3.0-beta3",
-    "mocha": "^2.2.4",
-    "sinon": "^1.14.1"
+    "mocha": "^2.2.4"
   },
   "dependencies": {
     "async": "^0.9.0",
-    "broadway": "^1.1.0",
     "cron-parser": "^0.6.1",
-    "forever-monitor": "^1.5.2",
     "mkdirp": "^0.5.0",
     "utile": "^0.3.0"
   }
