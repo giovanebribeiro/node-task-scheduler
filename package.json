@@ -2,7 +2,7 @@
   "name": "node-task-scheduler",
   "version": "1.0.0",
   "description": "A Task scheduler for node.js, with cron-syntax, specific execution intervals and due dates",
-  "main": "lib/TaskScheduler.js",
+  "main": "./lib/scheduler.js",
   "scripts": {
     "test": "grunt"
   },
@@ -32,13 +32,13 @@
   "homepage": "https://github.com/giovanebribeiro/node-task-scheduler",
   "devDependencies": {
     "chai": "^2.2.0",
-    "debug": "^2.1.3",
     "grunt": "^0.4.5",
     "grunt-cafe-mocha": "^0.1.13",
     "grunt-contrib-jshint": "^0.11.1",
     "mocha": "^2.2.4"
   },
   "dependencies": {
+    "debug": "^2.1.3",
     "async": "^0.9.0",
     "cron-parser": "^0.6.1",
     "mkdirp": "^0.5.0",
