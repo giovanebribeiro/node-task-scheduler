@@ -9,8 +9,7 @@ npm install --save node-task-scheduler
 
 ## Example usage
 ```
-var TaskScheduler=require('node-task-scheduler');
-ts = new TaskScheduler();
+var ts=require('node-task-scheduler');
 global.scheduler = ts; //available to all application
 
 //starting previous tasks
