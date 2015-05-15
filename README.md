@@ -41,5 +41,7 @@ scheduler.removeTask('hello');
 | removeTask | Removes the task scheduler.  The task process will stop in next iteration. | The task name                                                                                                                    |
 | start      | Load tasks previously saved and starts them. It needs to be called once.   | Callback function without parameters                                                                                             |
 | haveTask   | Check if task is present in scheduler                                      | The task name                                                                                                                    |
-| isRunning  | Check if task is running                                                   | The Task name                                                                                                                    |## License
+| isRunning  | Check if task is running                                                   | The Task name                                                                                                                    |
+
+## License
 [MIT](http://opensource.org/licenses/MIT)
