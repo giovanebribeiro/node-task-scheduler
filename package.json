@@ -1,7 +1,7 @@
 {
   "name": "node-task-scheduler",
-  "version": "0.0.0",
-  "description": "A Task scheduler for node.js, with cron-syntax and limit dates",
+  "version": "1.0.0",
+  "description": "A Task scheduler for node.js, with cron-syntax, specific execution intervals and due dates",
   "main": "lib/TaskScheduler.js",
   "scripts": {
     "test": "grunt"

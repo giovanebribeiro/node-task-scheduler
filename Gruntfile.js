@@ -22,7 +22,8 @@ module.exports = function(grunt){
                   'tests/scheduler.js'
                  ], 
             options:{ 
-              ui: 'tdd' 
+              ui: 'tdd',
+              reporter: 'nyan' 
             }, 
       }
     },
