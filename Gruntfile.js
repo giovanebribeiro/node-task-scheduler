@@ -1,7 +1,8 @@
 module.exports = function(grunt){
   [
     'grunt-contrib-jshint',
-    'grunt-cafe-mocha'
+    'grunt-cafe-mocha',
+    'grunt-bump'
   ].forEach(function(task){
     grunt.loadNpmTasks(task);
   });
