@@ -9,9 +9,8 @@ npm install --save node-task-scheduler
 
 ## Example usage
 ```
-var TaskScheduler=require('node-task-scheduler');
-ts = new TaskScheduler();
-global.scheduler = ts; //available to all application
+var ts=require('node-task-scheduler');
+global.scheduler = ts; //available to entire application
 
 //starting previous tasks
 ts.start(function(){
@@ -42,5 +41,36 @@ scheduler.removeTask('hello');
 | removeTask | Removes the task scheduler.  The task process will stop in next iteration. | The task name                                                                                                                    |
 | start      | Load tasks previously saved and starts them. It needs to be called once.   | Callback function without parameters                                                                                             |
 | haveTask   | Check if task is present in scheduler                                      | The task name                                                                                                                    |
-| isRunning  | Check if task is running                                                   | The Task name                                                                                                                    |## License
+| isRunning  | Check if task is running                                                   | The Task name                                                                                                                    |
+
+## Events
+The node-task-scheduler also have events support. You can easily monitore the 'scheduler' event. The event function have 3 parameters: the type message, task process pid, and the 'msg' object, which have 3 properties:
+ 
+ * code: The message code
+ * message: The event message
+ * task: the task name
+
+```
+scheduler.on('scheduler', function(type, pid, msg){
+	switch(type){
+		case 'task_loop':
+			// When an execution is over and the next execution starts
+			if(code===0){
+				// normal execution, loop continues
+			}else if(code === 1){
+				// The task have a negative delay. The task is not executed in this iteration and the loop continues. 
+			}
+			break;
+		case 'task_exit':
+			// Task`s last execution. Loop ends.
+			break;
+		case 'task_error':
+			// task error. Loop ends.
+		break;
+		default: break;
+	}
+})
+```
+
+## License
 [MIT](http://opensource.org/licenses/MIT)
