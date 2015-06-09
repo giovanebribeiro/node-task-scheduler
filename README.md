@@ -35,7 +35,7 @@ scheduler.removeTask('hello');
 | Function   | Description                                                                | Parameters (in order)                                                                                                            |
 |------------|----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
 | addTask    | Add (or update) a task to scheduler                                        | Task name. If the name is already assigned to other task, this task will be updated with these data.                             |
-|            |                                                                            | Function to be executed. The function MUST have a callback with no params                                                        |
+|            |                                                                            | Function to be executed. The function MUST have a callback                                                        |
 |            |                                                                            | Cron-string with the frequency of the task executions. Check this link (https://github.com/harrisiirak/cron-parser) for details. |
 |            |                                                                            | Limit date to execute the task (optional).                                                                                       |
 | removeTask | Removes the task scheduler.  The task process will stop in next iteration. | The task name                                                                                                                    |
@@ -71,6 +71,28 @@ scheduler.on('scheduler', function(type, pid, msg){
 	}
 })
 ```
+
+## Callback parameters and exit codes
+The callback function have 2 parameters:
+- The error object, and
+- The exit code
+
+But, the parameters are not required. So, the following callback formats are allowed:
+- callback()
+- callback(err)
+- callback(null, exitCode);
+
+The exit code can be any integer number starting from 10. Some reserved exit codes are not used, but you may have problems if we use. The reserved exit codes are:
+- **0** = Loop task ends.
+- **1** = Unknown exit code. If you not specified an exit code, the framework will put this one. And the loop continues.
+- **2** = Negative delay. When the delay to next task execution is negative. The task is not executed and the loop continues.
+- **3** = Not used.
+- **4** = Not used.
+- **5** = Not used.
+- **6** = Not used.
+- **7** = Not used.
+- **8** = Not used.
+- **9** = Not used.
 
 ## License
 [MIT](http://opensource.org/licenses/MIT)
