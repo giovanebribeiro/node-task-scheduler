@@ -1,3 +1,15 @@
+##
+# Travis life cycle
+# ==================
+#
+# before_install
+# install
+# before_script
+# script
+# after_success or after_failure
+# after_script
+##
+
 language: node_js
 node_js:
   - "0.12"
@@ -5,3 +17,4 @@ node_js:
   - "0.10"
 before_install: npm install -g grunt-cli
 install: npm install
+script: grunt
