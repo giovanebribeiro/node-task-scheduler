@@ -78,27 +78,9 @@ module.exports = function(grunt){
 
   });
 
-  //grunt.registerTask('changelog', ['changelog'])
-
-  grunt.registerTask('install', 'install the project dependencies', function(){
-    var exec = require('child_process').exec;
-
-    var cb = this.async();
-
-    exec('npm install', function(err, stdout, stderr){
-      if(err) throw err;
-
-      console.log(stdout);
-      cb();
-    });
-
-  });
-
-  grunt.registerTask('test_runner', ['jshint', 'cafemocha:runner']);
-
   grunt.registerTask('test', ['jshint', 'cafemocha']);
   
-  grunt.registerTask('default', ['install', 'test']);
+  grunt.registerTask('default', ['test']);
 
   grunt.registerTask('release', 'Generates the release of this project.', function(type){
     grunt.task.run([
