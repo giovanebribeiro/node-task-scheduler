@@ -69,7 +69,8 @@ module.exports = function(grunt){
     bump:{
       options:{
         updateConfigs: ['pkg'],
-        commitFiles: ['package.json', 'CHANGELOG.md']
+        commitFiles: ['package.json', 'CHANGELOG.md'],
+        pushTo: 'origin'
       }
     },
 
@@ -81,7 +82,7 @@ module.exports = function(grunt){
 
   grunt.registerTask('release', 'Generates the release of this project.', function(type){
     grunt.task.run([
-      'test',
+      /*'test',*/
       'bump-only:' + (type || 'patch'),
       'changelog',
       'spawn:changelog',
