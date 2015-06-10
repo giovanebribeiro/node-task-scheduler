@@ -21,32 +21,32 @@ module.exports = function(grunt){
     },
 
     cafemocha: {
-      all: {
-            src: [
-                  'tests/data.js',
-                  'tests/manager.js',
-                  'tests/task.js',
-                  'tests/runner.js',
-                  'tests/scheduler.js'
-                 ], 
+      
+      data:{
+        src:['tests/data.js'],
+        options:{ ui: 'tdd' }
+      },
 
-            options:{ 
-              ui: 'tdd'
-            }, 
+      manager:{
+        src:['tests/manager.js'],
+        options:{ ui: 'tdd' }
+      },
+
+      task:{
+        src:['tests/task.js'],
+        options:{ ui: 'tdd' }
       },
 
       runner: {
-        src:[
-              'tests/data.js',
-              'tests/manager.js',
-              'tests/task.js',
-              'tests/runner.js'
-            ],
+        src:['tests/runner.js'],
+        options:{ ui: 'tdd' }
+      },
 
-        options:{
-          ui: 'tdd'
-        }
+      scheduler:{
+        src:['tests/scheduler.js'],
+        options:{ ui:'tdd' }
       }
+
     },
 
     changelog:{
@@ -76,7 +76,42 @@ module.exports = function(grunt){
 
   });
 
-  grunt.registerTask('test', ['jshint', 'cafemocha']);
+  grunt.registerTask('test', 'Make some tests', function(type){
+    var tasks = ['jshint'];
+
+    if(!type){
+      type = "scheduler";
+    }
+
+    switch(type){
+      case 'basic':
+        tasks.push('cafemocha:data');
+        tasks.push('cafemocha:manager');
+        break;
+      case 'task':
+        tasks.push('cafemocha:data');
+        tasks.push('cafemocha:manager');
+        tasks.push('cafemocha:task');
+        break;
+      case 'runner':
+        tasks.push('cafemocha:data');
+        tasks.push('cafemocha:manager');
+        tasks.push('cafemocha:task');
+        tasks.push('cafemocha:runner');
+        break;
+      case 'scheduler':
+        tasks.push('cafemocha:data');
+        tasks.push('cafemocha:manager');
+        tasks.push('cafemocha:task');
+        tasks.push('cafemocha:runner');
+        tasks.push('cafemocha:scheduler');
+        break;
+      default:
+        throw new Error(type+": unknown option");
+    }
+
+    grunt.task.run(tasks);
+  });
   
   grunt.registerTask('default', ['test']);
 

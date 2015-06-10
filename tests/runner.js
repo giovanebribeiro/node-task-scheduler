@@ -43,7 +43,7 @@ suite('TaskRunner tests', function(){
             assert(!runner.isRunning('hello'), "The task is still running after stops.");
             runner.removeListener('runner', runnerListener);
             return done();
-          }, 1*60*1000);
+          }, 2*60*1000);
         }
 
       }
