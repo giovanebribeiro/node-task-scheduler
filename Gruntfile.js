@@ -1,6 +1,3 @@
-var semver = require('semver');
-var currentVersion = require('./package.json').version;
-
 module.exports = function(grunt){
   [
     'grunt-contrib-jshint',
