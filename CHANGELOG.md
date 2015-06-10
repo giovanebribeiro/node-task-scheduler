@@ -1,5 +1,3 @@
-# Changelog
-
 ## 1.0.1 - 17/05/2015
   * Updating README.md ('Events' section)
   * Installing grunt-bump

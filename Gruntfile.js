@@ -1,8 +1,15 @@
+var semver = require('semver');
+var currentVersion = require('./package.json').version;
+
 module.exports = function(grunt){
   [
     'grunt-contrib-jshint',
     'grunt-cafe-mocha',
-    'grunt-bump'
+    'grunt-bump',
+    'grunt-prompt',
+    'grunt-conventional-changelog',
+    'grunt-spawn',
+    'grunt-npm'
   ].forEach(function(task){
     grunt.loadNpmTasks(task);
   });
@@ -45,7 +52,33 @@ module.exports = function(grunt){
       }
     },
 
+    changelog:{
+      options:{
+        file: "CHANGELOG.md"
+      } 
+    },
+
+    spawn:{
+      changelog:{
+        command: 'vim',
+        commandArgs: ['{0}'],
+        pattern: __dirname+'/CHANGELOG.md',
+        opts:{
+          stdio: 'inherit'
+        }
+      }
+    },
+
+    bump:{
+      options:{
+        updateConfigs: ['pkg'],
+        commitFiles: ['package.json', 'CHANGELOG.md']
+      }
+    },
+
   });
+
+  //grunt.registerTask('changelog', ['changelog'])
 
   grunt.registerTask('install', 'install the project dependencies', function(){
     var exec = require('child_process').exec;
@@ -61,8 +94,19 @@ module.exports = function(grunt){
 
   });
 
-  grunt.registerTask('test', ['install', 'jshint', 'cafemocha']); 
-  
   grunt.registerTask('test_runner', ['jshint', 'cafemocha:runner']);
-//  grunt.registerTask('default', ['jshint', 'cafemocha']);
+
+  grunt.registerTask('test', ['jshint', 'cafemocha']);
+  
+  grunt.registerTask('default', ['install', 'test']);
+
+  grunt.registerTask('release', 'Generates the release of this project.', function(type){
+    grunt.task.run([
+      'bump-only:' + (type || 'patch'),
+      'changelog',
+      'spawn:changelog',
+      'bump-commit',
+      'npm-publish'
+      ]);
+  });
 };
