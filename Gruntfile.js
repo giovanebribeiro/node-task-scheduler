@@ -81,6 +81,7 @@ module.exports = function(grunt){
 
   grunt.registerTask('release', 'Generates the release of this project.', function(type){
     grunt.task.run([
+      'test',
       'bump-only:' + (type || 'patch'),
       'changelog',
       'spawn:changelog',
