@@ -37,7 +37,6 @@
     "grunt-cafe-mocha": "^0.1.13",
     "grunt-contrib-jshint": "^0.11.1",
     "grunt-conventional-changelog": "^1.2.2",
-    "grunt-exec": "^0.4.6",
     "grunt-npm": "0.0.2",
     "grunt-spawn": "^1.1.72",
     "mocha": "^2.2.4"
