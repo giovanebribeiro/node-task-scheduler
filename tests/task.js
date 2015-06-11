@@ -18,10 +18,10 @@ suite('Task tests', function(){
     // set timeout to delay
     this.timeout(delay*1000*60*2);
     debug('creating the task');
-    var helloTask1 = new TaskData('hello', function(callback){
-      console.log("Hello World from hello");
+    var helloTask1 = new TaskData('hello', function(args, callback){
+      console.log("Hello World from ", args.hello);
       callback();
-    }, '0 */'+delay+' * * * *', tomorrow);
+    }, '0 */'+delay+' * * * *', tomorrow, {hello: 'world'});
 
     var delayTest = delay*1000*60;
 

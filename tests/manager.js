@@ -27,13 +27,15 @@ suite('TaskManager tests', function(){
     this.timeout(4000);
 
     var name = "hello";
+    var args = {hello: 'world'};
     var activity = function(callback){
       console.log("Hello World from hello!!");
+      callback();
     };
     var cronFreq = '0 * * * * *';
     var endDate = tomorrow;
 
-    manager.createTask(name, activity, cronFreq, endDate, function(err, taskData){
+    manager.createTask(name, args, activity, cronFreq, endDate, function(err, taskData){
      if(err) throw err;
 
      assert(manager.haveTask('hello'), "The task is not saved.");
@@ -49,17 +51,17 @@ suite('TaskManager tests', function(){
   var hello = new TaskData('hello', function(callback){
     console.log("Hello World from helloTask1");
     callback();
-  }, '0 * * * * *', tomorrow);
+  }, '0 * * * * *', tomorrow, {hello: 'world1'});
   
   var hello2 = new TaskData('hello2', function(callback){
     console.log("Hello World from hello2");
     callback();
-  }, '0 */2 * * * *', tomorrow);
+  }, '0 */2 * * * *', tomorrow, {hello: 'world2'});
   
   var hello3 = new TaskData('hello3', function(callback){
     console.log("Hello World from hello3");
     callback();
-  }, '0 */3 * * * *', tomorrow);
+  }, '0 */3 * * * *', tomorrow, {hello: 'world3'});
 
   //2 - Export them to file
   async.series([
@@ -98,6 +100,7 @@ suite('TaskManager tests', function(){
 
  test('- if task is removed.', function(done){
     var name = "hello";
+    var args = {hello: 'world'};
     var activity = function(callback){
       console.log("Hello World from hello!!");
       callback();
@@ -105,7 +108,7 @@ suite('TaskManager tests', function(){
     var cronFreq = '0 * * * * *';
     var endDate = tomorrow;
 
-    manager.createTask(name, activity, cronFreq, endDate, function(err, taskData){
+    manager.createTask(name, args, activity, cronFreq, endDate, function(err, taskData){
      if(err) throw err;
 
      manager.remove('hello');

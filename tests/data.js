@@ -22,7 +22,7 @@ suite('TaskData.js tests', function(){
     tomorrow = tomorrow.setDate(tomorrow.getDate() + 1);
     helloTask = new TaskData("hello", function(){ 
       return "Hello World"; 
-    }, '* * * * *', tomorrow);
+    }, '* * * * *', tomorrow, {hello: "world"});
   });
 
   test('- if task name is correct', function(done){
@@ -47,6 +47,11 @@ suite('TaskData.js tests', function(){
 
   test("- if task activity returns 'Hello World'", function(done){
     assert(helloTask.activity() == "Hello World", "The task activity must print 'Hello World'");
+    done();
+  });
+
+  test("- if task activity args contains a json: {hello: 'world'}", function(done){
+    assert(helloTask.args.hello == "world", "The task activity not have the correct json object");
     done();
   });
 
@@ -136,7 +141,19 @@ suite('TaskData.js tests', function(){
         helloTask.destroyFiles();
         done();
       });
-    }); 
+    });
+
+   test("if imported task have correct property: 'args'", function(done){
+    helloTask.toFile(function(err){
+      if(err) throw err;
+
+      TaskData.toTaskData('hello', function(taskData){
+        assert(taskData.args.hello == "world", "The task activity not have the correct JSON args");
+        helloTask.destroyFiles();
+        done();
+      });
+    });
+   }); 
 
   }); 
   /*
