@@ -22,7 +22,7 @@ suite('TaskRunner tests', function(){
 
   test('- if the task is executed 3 times and stops.', function(done){
     // set timeout to delay
-    var delayEndDate = 5 * 60 * 1000; // 5 minute in milisseconds
+    var delayEndDate = 7 * 60 * 1000; // 6 minutes in milisseconds
     this.timeout(delayEndDate);
 
     var count = 0;
