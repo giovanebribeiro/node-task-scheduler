@@ -9,3 +9,4 @@ tests/
 README.md
 .gitignore
 .travis.yml
+CHANGELOG.md
