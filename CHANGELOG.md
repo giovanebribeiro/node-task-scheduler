@@ -1,3 +1,18 @@
+<a name"2.0.0"></a>
+## 2.0.0 (2015-06-11)
+
+
+#### Bug Fixes
+
+* **docs:** update documentation and some fixes. ([359ca9f1](https://github.com/giovanebribeiro/node-task-scheduler/commit/359ca9f1))
+* **grunt:** remove unused plugin and test tasks updates ([0c37b426](https://github.com/giovanebribeiro/node-task-scheduler/commit/0c37b426))
+
+
+#### Features
+
+* Add a JSON with task input data. ([7e79a05d](https://github.com/giovanebribeiro/node-task-scheduler/commit/7e79a05d), closes [#2](https://github.com/giovanebribeiro/node-task-scheduler/issues/2))
+
+
 <a name"1.1.0"></a>
 ## 1.1.0 (2015-06-10)
 

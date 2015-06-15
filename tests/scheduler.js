@@ -18,10 +18,10 @@ suite('TaskScheduler tests', function(){
     this.timeout(1 * 60 * 1000 * 5 * 2); // 10 minutes
     
     // create the task  
-    var hello = new TaskData("hello", function(callback){ 
-      console.log("Hello World!" + new Date());
+    var hello = new TaskData("hello", function(args, callback){ 
+      console.log("Hello World! " + new Date(), "args: ", args.hello);
       callback(); 
-    }, '0 * * * * *');
+    }, '0 * * * * *', undefined, {hello: 'world'});
 
     //save the task to file
     hello.toFile(function(err){
@@ -86,15 +86,15 @@ suite('TaskScheduler tests', function(){
     var endDate = new Date(tenMinutesLater);
 
     //add the first task with 1 minute of delay
-    scheduler.addTask('hello', function(callback){
-      console.log("Hello from hello! " + new Date());
+    scheduler.addTask('hello', {hello: 'world'}, function(args, callback){
+      console.log("Hello from hello! " + new Date(), "ARGS: "+args.hello);
       callback();
     }, "0 * * * * *", endDate);
 
     // add the second task after 4 minutes, with 2 minutes of delay and same endDate
     setTimeout(function(){
-      scheduler.addTask('hello2', function(callback){
-        console.log("Hello from hello2! "+new Date());
+      scheduler.addTask('hello2', {hello: 'world2'}, function(args, callback){
+        console.log("Hello from hello2! "+new Date(), "ARGS: "+args.hello);
         callback();
       }, "0 */2 * * * *", endDate);
     }, (1*60*1000*4));

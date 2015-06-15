@@ -3,7 +3,6 @@ module.exports = function(grunt){
     'grunt-contrib-jshint',
     'grunt-cafe-mocha',
     'grunt-bump',
-    'grunt-prompt',
     'grunt-conventional-changelog',
     'grunt-spawn',
     'grunt-npm'
