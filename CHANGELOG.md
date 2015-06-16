@@ -1,3 +1,15 @@
+<a name"2.0.1"></a>
+### 2.0.1 (2015-06-15)
+
+
+#### Bug Fixes
+
+* updating README.md to include wiki. ([917504f9](https://github.com/giovanebribeiro/node-task-scheduler/commit/917504f9))
+* updating README.md to include task arguments. ([b94d6e34](https://github.com/giovanebribeiro/node-task-scheduler/commit/b94d6e34))
+* Add changelog in .npmignore ([dbecf3f4](https://github.com/giovanebribeiro/node-task-scheduler/commit/dbecf3f4))
+* **task:** Eliminate the reserved exit code check. ([462c412b](https://github.com/giovanebribeiro/node-task-scheduler/commit/462c412b), closes [#3](https://github.com/giovanebribeiro/node-task-scheduler/issues/3))
+
+
 <a name"2.0.0"></a>
 ## 2.0.0 (2015-06-11)
 
