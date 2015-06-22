@@ -4,21 +4,32 @@ var assert = chai.assert;
 var TaskManager = require('../lib/TaskManager.js');
 var TaskRunner = require('../lib/TaskRunner.js');
 var TaskConstraints = require('../lib/TaskConstraints.js');
+var f = require('../lib/util/file.js');
 
 suite('TaskRunner tests', function(){
   var runner;
   var manager;
   var tomorrow;
 
+  var tasksDir = path.join(__dirname, 'tasks');
+
+  before(function(){
+    if(!f.exists(tasksDir)){
+      f.mkdir(tasksDir);
+    } 
+  });
+
+  after(function(){ 
+    f.rm(tasksDir);
+  });
+
   setup(function(){
     tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    manager = new TaskManager();
+    manager = new TaskManager(tasksDir);
     runner = new TaskRunner(manager);
   });
-
-
 
   test('- if the task is executed 3 times and stops.', function(done){
     // set timeout to delay
@@ -29,25 +40,32 @@ suite('TaskRunner tests', function(){
 
     var runnerListener =  function(type, pid, data){
       if(type == "task_loop"){
-        console.log("DATA CODE ", data.code);
+//        console.log("DATA CODE ", data.code);
 
         if(data.code < 90 || data.code > 99){ // 90 - 99 is the range of reserved exit codes
 
-          console.log('count value: ', count);
+//          console.log('count value: ', count);
           if(count < 2){
             count++;
           }else{
-            console.log(" Stopping the task. count = "+count);
-            runner.stop('hello');
+ //           console.log(" Stopping the task. count = "+count);
+            runner.stop('hello', function(){
+
+//              console.log("Kill file: ", TaskRunner.getKillFile(tasksDir, "hello"));
+
+              //assert(!f.exists(TaskRunner.getKillFile(tasksDir, "hello")), "The kill file is not created.");
          
-            // only in the next delay, we can check if task will stop to execute.
-            console.log("Waiting the next delay to check"); 
-            setTimeout(function(){
-              console.log("Checking..");
-              assert(!runner.isRunning('hello'), "The task is still running after stops.");
-              runner.removeListener('runner', runnerListener);
-              return done();
-            }, 2*60*1000);
+              // only in the next delay, we can check if task will stop to execute.
+//            console.log("Waiting the next delay to check"); 
+              setTimeout(function(){
+ //               console.log("Checking..");
+                assert(!runner.isRunning('hello'), "The task is still running after stops.");
+                runner.removeListener('runner', runnerListener);
+                return done();
+              }, 2*60*1000);
+
+            });
+
           }
 
         }
@@ -68,7 +86,7 @@ suite('TaskRunner tests', function(){
     };
     var cronFreq = '0 * * * * *';
 
-    var startDate = Date.now(); 
+    var startDate = Date.now();
     var endDate = tomorrow;
 
     manager.createTask(name, args, activity, cronFreq, endDate, function(err, taskData){

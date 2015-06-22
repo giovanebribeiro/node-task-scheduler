@@ -9,15 +9,25 @@ var assert = chai.assert;
 var f = require('../lib/util/file.js');
 require('../lib/util/date.js');
 var TaskData = require('../lib/TaskData.js');
+var path = require('path');
 
 suite('TaskData.js tests', function(){
   var helloTask;
   var tomorrow;
 
+  var tasksDir = path.join(__dirname, 'tasks');
+
+  before(function(){
+    if(!f.exists(tasksDir)){
+      f.mkdir(tasksDir);
+    } 
+  });
+
+  after(function(){ 
+    f.rm(tasksDir);
+  });
+
   setup(function(){
-    // remove the tasks folder
-    f.rm(TaskData.getTasksDir());
-  
     tomorrow = new Date();
     tomorrow = tomorrow.setDate(tomorrow.getDate() + 1);
     helloTask = new TaskData("hello", function(){ 
@@ -40,11 +50,6 @@ suite('TaskData.js tests', function(){
     done();
   });
 
-  /*test(' - if cron-paser next date is a date object', function(done){
-    assert(helloTask.cron.iterator.next() instanceof Date, "The task cron iterator not working.");
-    done();
-  });*/
-
   test("- if task activity returns 'Hello World'", function(done){
     assert(helloTask.activity() == "Hello World", "The task activity must print 'Hello World'");
     done();
@@ -56,37 +61,37 @@ suite('TaskData.js tests', function(){
   });
 
   test('- if exported task file exists', function(done){
-    helloTask.toFile(function(err){
+    helloTask.toFile(tasksDir, function(err){
       if(err) throw err;
     
-      assert(f.exists(helloTask.getTaskDataFile()), "Task data file not exists.");
-      helloTask.destroyFiles();
+      assert(f.exists(helloTask.getTaskDataFile(tasksDir)), "Task data file not exists.");
+      helloTask.destroyFiles(tasksDir);
       done();
     });
   });
 
   test('- if exported task file content is a string', function(done){
-     helloTask.toFile(function(err){
+     helloTask.toFile(tasksDir, function(err){
       if(err) throw err;
 
-      f.read(helloTask.getTaskDataFile(), function(err, data){
+      f.read(helloTask.getTaskDataFile(tasksDir), function(err, data){
         if(err) throw err;
 
         assert(typeof data == "string", "the task file content type is incorrect");
         
-        helloTask.destroyFiles();
+        helloTask.destroyFiles(tasksDir);
         done();
       });
      });
   });
 
   test("- if imported task have correct property: 'name'", function(done){
-    helloTask.toFile(function(err){
+    helloTask.toFile(tasksDir, function(err){
       if(err) throw err;
 
-      TaskData.toTaskData('hello', function(taskData){  
+      TaskData.toTaskData(tasksDir, 'hello', function(taskData){  
         assert(taskData.name == "hello", "The task name is incorrect. It should be: 'hello'");
-        helloTask.destroyFiles();
+        helloTask.destroyFiles(tasksDir);
         done();
       });
     });  
@@ -94,24 +99,24 @@ suite('TaskData.js tests', function(){
 
 
   test("- if imported task have correct property: 'endDate'", function(done){
-    helloTask.toFile(function(err){
+    helloTask.toFile(tasksDir, function(err){
       if(err) throw err;
 
-      TaskData.toTaskData('hello', function(taskData){
+      TaskData.toTaskData(tasksDir, 'hello', function(taskData){
         assert(taskData.endDate.compare(new Date(tomorrow)), "The task end date should be: "+tomorrow.toString()+", and not "+taskData.endDate.toString());
-        helloTask.destroyFiles();
+        helloTask.destroyFiles(tasksDir);
         done();
       });
     });  
   });   
   
   test("- if imported task have correct property: 'cron.string'", function(done){
-    helloTask.toFile(function(err){
+    helloTask.toFile(tasksDir, function(err){
       if(err) throw err;
 
-      TaskData.toTaskData('hello', function(taskData){
+      TaskData.toTaskData(tasksDir, 'hello', function(taskData){
         assert(taskData.cron == "* * * * *", "The cron string is incorrect. Should be: '* * * * *'");
-        helloTask.destroyFiles();
+        helloTask.destroyFiles(tasksDir);
         done();
       });
     });
@@ -133,43 +138,28 @@ suite('TaskData.js tests', function(){
   
   test("- if imported task have correct property: 'activity'", function(done){
     
-    helloTask.toFile(function(err){
+    helloTask.toFile(tasksDir, function(err){
       if(err) throw err;
 
-      TaskData.toTaskData('hello', function(taskData){
+      TaskData.toTaskData(tasksDir, 'hello', function(taskData){
         assert(taskData.activity() == "Hello World", "The task activity must print 'Hello World'");
-        helloTask.destroyFiles();
+        helloTask.destroyFiles(tasksDir);
         done();
       });
     });
 
    test("if imported task have correct property: 'args'", function(done){
-    helloTask.toFile(function(err){
+    helloTask.toFile(tasksDir, function(err){
       if(err) throw err;
 
-      TaskData.toTaskData('hello', function(taskData){
+      TaskData.toTaskData(tasksDir, 'hello', function(taskData){
         assert(taskData.args.hello == "world", "The task activity not have the correct JSON args");
-        helloTask.destroyFiles();
+        helloTask.destroyFiles(tasksDir);
         done();
       });
     });
    }); 
 
   }); 
-  /*
-  test(' - if task data export/import works', function(done){
-    assert(f.exists(helloTask.getTaskActivityFile()), "Task activity file not exists.");
-    assert(typeof f.read(helloTask.getTaskActivityFile()) == "string", "The task activity file content is incorrect");
-    
-    var helloTask2 = TaskData.toTaskData("hello");
-    assert(helloTask2.endDate.getTime() == tomorrow, "The task end date should be: "+tomorrow.toString());
-    assert(helloTask2.cron.iterator.next() instanceof Date, "The task cron iterator not working.");
-    assert(helloTask2.activity() == "Hello World", "The task activity must print 'Hello World'");
-
-    done();
-  });
-  */
-
-
 
 });

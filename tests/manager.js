@@ -16,12 +16,23 @@ suite('TaskManager tests', function(){
   var manager; 
   var tomorrow;
   
+  var tasksDir = path.join(__dirname, 'tasks');
+
+  before(function(){
+    if(!f.exists(tasksDir)){
+      f.mkdir(tasksDir);
+    } 
+  });
+
+  after(function(){ 
+    f.rm(tasksDir);
+  });
+  
   setup(function(){
     tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    manager = new TaskManager();
+    manager = new TaskManager(tasksDir);
   });
-
 
   test('- if the task is created', function(done){
     this.timeout(4000);
@@ -66,19 +77,19 @@ suite('TaskManager tests', function(){
   //2 - Export them to file
   async.series([
     function(callback){
-      hello.toFile(function(err){
+      hello.toFile(tasksDir, function(err){
         callback(err);
       });
     },
 
     function(callback){
-      hello2.toFile(function(err){
+      hello2.toFile(tasksDir, function(err){
         callback(err);
       });
     },
     
     function(callback){
-      hello3.toFile(function(err){
+      hello3.toFile(tasksDir, function(err){
         callback(err);
       });
     },
@@ -116,58 +127,5 @@ suite('TaskManager tests', function(){
      done();
    }); 
  });
-
-  /*
-  test(' - tasks CRUD', function(done){
-    //
-    // Testing the exceptions thrown
-    // The assert.throws function have 3 parameters:
-    // - The function to test, wrapped in another function to receive args
-    // - The Error type
-    // - The Error message, to compare.
- 
-    // no parameters
-     assert.throws(function(){
-       manager.createOrUpdate();
-     }, Error,  'The task name is required, at least');
-
-     // insufficient parameters for new task
-     assert.throws(function(){
-      manager.createOrUpdate("hello2");
-     }, Error, 'Insufficient parameters');
-
-     // wrong type parameter
-     assert.throws(function(){
-      manager.createOrUpdate("hello2", "* * * * *", "wrong type function", tomorrow);
-     }, Error, "The task activity must be a function");
-
-
-    // Create a new TaskData...
-    manager.createOrUpdate('hello2', '* * * * *', function(){ assert.ok("hello2 executed."); }, tomorrow, false);
-    assert(manager.tasksSaved.hello2.name == "hello2", "The Task Data is not saved properly.");
-
-    // ... update this object ..
-    manager.createOrUpdate('hello2', '* * * * *');
-    assert(manager.tasksSaved.hello2.cron.string == '* * * * *');
-
-    // ... then remove it.
-    manager.remove('hello2');
-    assert.isUndefined(manager.tasksSaved.hello2, "The task is not removed.");
-    done();
-
-  });
-
-  test(" - manage threads", function(done){
-    var clock = sinon.useFakeTimers();
-    manager.createOrUpdate('hello3', '* * * * *', function(){
-      console.log("Hello World!!");
-      assert.ok("All fine.");
-    });
-
-    clock.tick(1000);
-    manager.stop();
-    done();
-  });
-  */
 
 });
