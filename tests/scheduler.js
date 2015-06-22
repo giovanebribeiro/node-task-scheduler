@@ -27,10 +27,16 @@ suite('TaskScheduler tests', function(){
     hello.toFile(function(err){
       if(err) throw err;
 
-      //load the saved task
-      scheduler.start(function(){
-        console.log("Task Runner started.");
+      console.log("toFile executed.");
 
+      //load the saved task
+      scheduler.start(function(err, taskNames){
+        if(err) throw err;
+        
+        assert(!(scheduler instanceof Array), "The task names type is not an array.");
+
+        console.log("Task Runner started.", taskNames);
+        
         assert(scheduler.isRunning('hello'), "The task previously saved is not running.");
 
         setTimeout(function(){
