@@ -8,13 +8,21 @@ npm install --save node-task-scheduler
 ```
 
 ## Example usage
-```
-var ts=require('node-task-scheduler');
-global.scheduler = ts; //available to entire application
+```javascript
+var nts=require('node-task-scheduler');
+
+var scheduler = nts.init({
+  // add some parameters! Check wiki for details
+});
+
+global.scheduler = scheduler; //available to entire application
 
 //starting previous tasks
-ts.start(function(){
-  console.log("Previous tasks loaded");
+ts.start(function(taskNames){
+  console.log("Previous tasks loaded:");
+  taskNames.forEach(function(taskName){
+    console.log(taskName);
+  });
 });
 
 ...
@@ -28,7 +36,9 @@ scheduler.addTask('hello', {hello: 'world'}, function(args, callback){
 ...
 
 //removing the task
-scheduler.removeTask('hello');
+scheduler.removeTask('hello', function(){
+  console.log("Task 'hello' removed.");
+});
 ```
 
 ## Wiki
