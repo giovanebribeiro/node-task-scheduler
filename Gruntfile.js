@@ -44,6 +44,11 @@ module.exports = function(grunt){
       scheduler:{
         src:['tests/scheduler.js'],
         options:{ ui:'tdd' }
+      },
+
+      index:{
+        src:['tests/index.js'],
+        options:{ ui:'tdd' }
       }
 
     },
@@ -79,7 +84,7 @@ module.exports = function(grunt){
     var tasks = ['jshint'];
 
     if(!type){
-      type = "scheduler";
+      type = "all";
     }
 
     switch(type){
@@ -105,8 +110,22 @@ module.exports = function(grunt){
         tasks.push('cafemocha:runner');
         tasks.push('cafemocha:scheduler');
         break;
+      case 'all':
+        tasks.push('cafemocha:data');
+        tasks.push('cafemocha:manager');
+        tasks.push('cafemocha:task');
+        tasks.push('cafemocha:runner');
+        tasks.push('cafemocha:scheduler');
+        tasks.push('cafemocha:index');
+        break;
       default:
-        throw new Error(type+": unknown option");
+        console.log(type+": unknown option. Use the following options to use this task:");
+        console.log("* basic: Execute the basic set of tests (data and manager)");
+        console.log("* task: Execute the set of tests for tasks (data, manager and task)");
+        console.log("* runner: Execute the set of tests for task management (data, maager, task and runner)");
+        console.log("* scheduler: Execute the set of tests for task scheduler (data, manager, task, runner, scheduler)");
+        console.log("* all (default option): Execute all the tests, including the tests for index file.");
+        break;
     }
 
     grunt.task.run(tasks);

@@ -3,15 +3,28 @@ var assert = chai.assert;
 
 var TaskScheduler = require('../lib/TaskScheduler.js');
 var TaskData = require('../lib/TaskData.js');
+var f = require('../lib/util/file.js');
 
 suite('TaskScheduler tests', function(){
   var tomorrow;
   var scheduler;
+  
+  var tasksDir = path.join(__dirname, 'tasks');
+
+  before(function(){
+    if(!f.exists(tasksDir)){
+      f.mkdir(tasksDir);
+    } 
+  });
+
+  after(function(){ 
+    f.rm(tasksDir);
+  });
 
   setup(function(){
     tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    scheduler = new TaskScheduler();
+    scheduler = new TaskScheduler(tasksDir);
   });
 
   test("- Starting tasks previously saved, execute during 4 minutes, and remove", function(done){
@@ -24,7 +37,7 @@ suite('TaskScheduler tests', function(){
     }, '0 * * * * *', undefined, {hello: 'world'});
 
     //save the task to file
-    hello.toFile(function(err){
+    hello.toFile(tasksDir, function(err){
       if(err) throw err;
 
       console.log("toFile executed.");
@@ -41,13 +54,15 @@ suite('TaskScheduler tests', function(){
 
         setTimeout(function(){
         
-          scheduler.removeTask('hello');
+          scheduler.removeTask('hello', function(){
         
-          setTimeout(function(){
-            assert(!scheduler.isRunning('hello'), "The task is still running even after removes");
-            assert(!scheduler.haveTask('hello'), "The task still exists in queue even after removes");
-            done();
-          }, 1*60*1000); // task delay
+            setTimeout(function(){
+              assert(!scheduler.isRunning('hello'), "The task is still running even after removes");
+              assert(!scheduler.haveTask('hello'), "The task still exists in queue even after removes");
+              done();
+            }, 1*60*1000); // task delay
+
+          });
 
         }, 1*60*1000*4);
 
