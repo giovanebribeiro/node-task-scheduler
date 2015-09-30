@@ -1,4 +1,4 @@
-# node-task-scheduler [![Build Status](https://travis-ci.org/giovanebribeiro/node-task-scheduler.svg?branch=master)](https://travis-ci.org/giovanebribeiro/node-task-scheduler) [![npm version](https://badge.fury.io/js/node-task-scheduler.svg)](http://badge.fury.io/js/node-task-scheduler)
+# node-task-scheduler [![Build Status](https://travis-ci.org/giovanebribeiro/node-task-scheduler.svg?branch=master)](https://travis-ci.org/giovanebribeiro/node-task-scheduler) [![npm version](https://badge.fury.io/js/node-task-scheduler.svg)](http://badge.fury.io/js/node-task-scheduler) [![Coverage Status](https://coveralls.io/repos/giovanebribeiro/node-task-scheduler/badge.svg?branch=master&service=github)](https://coveralls.io/github/giovanebribeiro/node-task-scheduler?branch=master)
 
 A Task scheduler for node.js, with cron-syntax, specific execution intervals and due dates.
 
