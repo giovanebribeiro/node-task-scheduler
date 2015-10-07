@@ -123,5 +123,68 @@ suite('TaskScheduler tests', function(){
 
   });
 
+  test("- add a task, and check the task list and count. Waits to finish.", function(done){
+    this.timeout(150000);
+
+    //creating the listener
+    var listener = function(type, pid, data){
+      if(type == 'task_exit'){
+        scheduler.removeListener('scheduler', listener);
+        done();
+      }
+    };
+
+
+    var fiveSecondsLater = Date.now()+(60*1000*5);
+    var endDate = new Date(fiveSecondsLater);
+
+    scheduler.addTask("hello", {}, function(args, callback){
+      console.log("Hello World!! ajhdcljabsdjcbasjldbc");
+      callback();
+    }, "* * * * * *", endDate);
+
+    //after 2 sec, make the assert
+    setTimeout(function(){
+      var taskList = scheduler.listTasks();
+      var count = scheduler.count();
+      assert(taskList.length > 0, taskList+": The task list is incorrect.");
+      assert(count === 1, count+": the count of tasks is incorrect");
+    }, 2000);
+  
+  });
+
+  test("- clean all tasks", function(done){
+    this.timeout(150000);
+
+    //creating the listener
+    var listener = function(type, pid, data){
+      if(type == 'task_exit'){
+        console.log("task exit triggered.");
+        scheduler.removeListener('scheduler', listener);
+      }
+    };
+
+    //creating the task
+    var tenSecondsLater = Date.now()+(60*1000*10);
+    var endDate = new Date(tenSecondsLater);
+
+    scheduler.addTask("hello", {}, function(args, callback){
+      console.log("Hello World!! 1234567890");
+      callback();
+    }, "* * * * * *", endDate);
+
+    //after 5 sec, make the assert
+    setTimeout(function(){
+      scheduler.clean();
+      //after 2 seconds, to make time for task is over, check
+      setTimeout(function(){ 
+        var count = scheduler.count();
+        assert(count === 0, count+": the clean function is not working!");
+        done();
+      }, 2000);
+    }, 5000);
+
+  });
+
 
 });
