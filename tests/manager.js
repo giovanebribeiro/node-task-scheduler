@@ -101,12 +101,40 @@ suite('TaskManager tests', function(){
       if(err) throw err;
 
       assert(tasksSaved.hello && tasksSaved.hello2 && tasksSaved.hello3, "The tasks not initialized.");
-      manager.clean();
       done();
     });
   });
 
 
+ });
+
+ test("- if count tasks are correct (3)", function(done){
+   //loading previous tasks
+   manager.loadTasks(function(err, tasksSaved){
+      if(err) throw err;
+
+      var count = manager.count();
+      assert(count === 3, count+": The count of tasks is incorrect");
+      done();
+
+    });
+
+ });
+
+ test("- if listTasks is working properly", function(done){
+  manager.loadTasks(function(err, tasksSaved){
+    if(err) throw err;
+    var list = manager.listTasks();
+    assert(list.length === 3, list+": The task list is incorrect.");
+    done();
+  });
+ });
+
+ test("- if clean is working.", function(done){
+  manager.clean();
+  var count = manager.count();
+  assert(count === 0, count+": The clean function is not working");
+  done();
  });
 
  test('- if task is removed.', function(done){
