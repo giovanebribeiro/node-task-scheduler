@@ -1,3 +1,12 @@
+<a name"2.2.0"></a>
+## 2.2.0 (2015-10-07)
+
+
+#### Features
+
+* add new functions ([d7617f6e](https://github.com/giovanebribeiro/node-task-scheduler/commit/d7617f6e))
+
+
 <a name"2.1.0"></a>
 ## 2.1.0 (2015-06-23)
 
