@@ -1,3 +1,11 @@
+## DEPRECIATED!!
+
+This project was an incredible lab for me and I learned many things. However, the node.js changed a lot and I don't have time at the moment to upgrade it. So, I decided to archive this repo. To everyone that (still!) uses this lib, I recommend the amazing project [agenda](https://www.npmjs.com/package/agenda)
+
+Thank you for all support. See ya!
+
+
+
 # node-task-scheduler [![Build Status](https://travis-ci.org/giovanebribeiro/node-task-scheduler.svg?branch=master)](https://travis-ci.org/giovanebribeiro/node-task-scheduler) [![npm version](https://badge.fury.io/js/node-task-scheduler.svg)](http://badge.fury.io/js/node-task-scheduler) [![Coverage Status](https://coveralls.io/repos/giovanebribeiro/node-task-scheduler/badge.svg?branch=master&service=github)](https://coveralls.io/github/giovanebribeiro/node-task-scheduler?branch=master)
 
 A Task scheduler for node.js, with cron-syntax, specific execution intervals and due dates.
